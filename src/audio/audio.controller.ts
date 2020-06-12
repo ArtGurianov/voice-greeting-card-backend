@@ -22,8 +22,8 @@ export class AudioController {
 
   @Post('uploadAudio')
   @UseInterceptors(FileInterceptor('audiofile'))
-  uploadAudio(@UploadedFile() audiofile: any, @Res() res: Response) {
-    console.log(audiofile)
-    res.status(HttpStatus.OK).send({message: 'successfully uploaded'})
+  async uploadAudio(@UploadedFile() audiofile: any, @Res() res: Response) {
+    const message = await this.audioService.processAudio(audiofile)
+    res.status(HttpStatus.OK).send({status: 'ok', message})
   }
 }
