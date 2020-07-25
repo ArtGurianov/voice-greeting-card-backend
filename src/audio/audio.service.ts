@@ -27,7 +27,6 @@ export class AudioService {
       body: audiofile.buffer,
     })
     const data = await result.json()
-    console.log(data)
-    return 'testing'
+    return data.text ? data.text : 'Введите текст.'
   }
 }
