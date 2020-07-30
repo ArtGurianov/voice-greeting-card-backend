@@ -9,6 +9,7 @@ import {DistributorRepository} from './distributor/distributor.repository'
 import {ManufacturerRepository} from './manufacturer/manufacturer.repository'
 import {UserController} from './user.controller'
 import {UserRepository} from './user.repository'
+import {UserResolver} from './user.resolver'
 import {UserService} from './user.service'
 
 @Module({
@@ -22,7 +23,7 @@ import {UserService} from './user.service'
     ]),
     AdminModule,
   ],
-  providers: [UserService, JwtService, ConfigService],
+  providers: [UserResolver, UserService, JwtService, ConfigService],
   controllers: [UserController],
 })
 export class UserModule {}

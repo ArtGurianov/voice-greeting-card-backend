@@ -3,7 +3,7 @@ import {ConfigService} from '@nestjs/config'
 import {Response} from 'express'
 import {sign, verify} from 'jsonwebtoken'
 import {User} from '../user/user.entity'
-import {defaultJwtAccessSecret} from '../utils/constants'
+import {defaultInsecureKey} from '../utils/constants'
 
 @Injectable()
 export class JwtService {
@@ -12,7 +12,7 @@ export class JwtService {
   createAccessToken(user: User) {
     return sign(
       {userId: user.id},
-      this.configService.get<string>('jwtAccessSecret', defaultJwtAccessSecret),
+      this.configService.get<string>('jwtAccessSecret', defaultInsecureKey),
       {expiresIn: '15m'},
     )
   }
@@ -20,10 +20,7 @@ export class JwtService {
   createRefreshToken(user: User) {
     return sign(
       {userId: user.id, role: user.role, tokenVersion: user.tokenVersion},
-      this.configService.get<string>(
-        'jwtRefreshSecret',
-        defaultJwtAccessSecret,
-      ),
+      this.configService.get<string>('jwtRefreshSecret', defaultInsecureKey),
       {expiresIn: '7d'},
     )
   }
@@ -42,10 +39,7 @@ export class JwtService {
     try {
       payload = verify(
         jid,
-        this.configService.get<string>(
-          'jwtAccessSecret',
-          defaultJwtAccessSecret,
-        ),
+        this.configService.get<string>('jwtAccessSecret', defaultInsecureKey),
       )
     } catch (e) {
       console.log(e)
@@ -60,10 +54,7 @@ export class JwtService {
     try {
       payload = verify(
         jid,
-        this.configService.get<string>(
-          'jwtRefreshSecret',
-          defaultJwtAccessSecret,
-        ),
+        this.configService.get<string>('jwtRefreshSecret', defaultInsecureKey),
       )
     } catch (e) {
       console.log(e)

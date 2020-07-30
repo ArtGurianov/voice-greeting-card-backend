@@ -1,12 +1,14 @@
 import {Module} from '@nestjs/common'
 import {ConfigModule} from '@nestjs/config'
 import {APP_GUARD} from '@nestjs/core'
+import {GraphQLModule} from '@nestjs/graphql'
 import {TypeOrmModule} from '@nestjs/typeorm'
 import {AppController} from './app.controller'
 import {AppService} from './app.service'
-import {AudioModule} from './audio/audio.module'
+import {AudioModule} from './card/audio/audio.module'
 import appConfig from './config/appConfig'
 import {JwtService} from './jwt/jwt.service'
+import {RedisAdapterModule} from './redis/redisAdapter.module'
 import {typeOrmConfig} from './typeormConfig'
 import {UserModule} from './user/user.module'
 import {RolesGuard} from './utils/roles.guard'
@@ -15,6 +17,19 @@ import {RolesGuard} from './utils/roles.guard'
   imports: [
     ConfigModule.forRoot({load: [appConfig]}),
     TypeOrmModule.forRoot(typeOrmConfig),
+    GraphQLModule.forRoot({
+      cors: {origin: 'http://localhost:3000', credentials: true},
+      installSubscriptionHandlers: true,
+      autoSchemaFile: 'schema.gql',
+      //autoSchemaFile: true,
+      //path: path.join(process.cwd(), 'src/schema.gql'),
+      playground: true,
+      context: ({req, res}) => ({
+        req,
+        res,
+      }),
+    }),
+    RedisAdapterModule,
     AudioModule,
     UserModule,
   ],

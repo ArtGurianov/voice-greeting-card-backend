@@ -1,1 +1,1 @@
-export const defaultJwtAccessSecret = '!insecured!'
+export const defaultInsecureKey = '!insecured!'

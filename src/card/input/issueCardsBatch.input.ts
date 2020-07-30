@@ -1,7 +1,9 @@
+import {Field, InputType} from '@nestjs/graphql'
 import {IsNumber, Max, Min} from 'class-validator'
 
-//export class IssueCardsBatchDto implements Partial<Card> {
-export class IssueCardsBatchDto {
+@InputType()
+export class CardsBatchInput {
+  @Field()
   @IsNumber()
   @Min(1)
   @Max(10)

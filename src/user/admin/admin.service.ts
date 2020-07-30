@@ -2,7 +2,7 @@ import {Injectable, InternalServerErrorException} from '@nestjs/common'
 import {ConfigService} from '@nestjs/config'
 import {InjectRepository} from '@nestjs/typeorm'
 import {UserRoles} from '../../types/roles'
-import {defaultJwtAccessSecret} from '../../utils/constants'
+import {defaultInsecureKey} from '../../utils/constants'
 import {UserRepository} from '../user.repository'
 import {AdminRepository} from './admin.repository'
 
@@ -20,12 +20,12 @@ export class AdminService {
     const newUser = await this.userRepo.save({
       email: this.configService.get<string>(
         'superAdminEmail',
-        defaultJwtAccessSecret,
+        defaultInsecureKey,
       ),
       role: UserRoles.SUPER_ADMIN,
       password: this.configService.get<string>(
         'superAdminPassword',
-        defaultJwtAccessSecret,
+        defaultInsecureKey,
       ),
     })
     if (!newUser)
@@ -37,7 +37,7 @@ export class AdminService {
     console.log(
       `Super Admin created. Please login with: ${this.configService.get<string>(
         'superAdminEmail',
-        defaultJwtAccessSecret,
+        defaultInsecureKey,
       )}`,
     )
   }

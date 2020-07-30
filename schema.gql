@@ -1,0 +1,62 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  email: String!
+  tokenVersion: Float!
+  role: String!
+}
+
+type CustomError {
+  id: ID!
+  location: String!
+  errorMessages: [String!]!
+}
+
+type CustomResult {
+  id: ID!
+  ok: Boolean!
+  errors: [CustomError!]
+}
+
+type Question {
+  id: ID!
+  quizId: ID!
+  options: [Option!]!
+}
+
+type Option {
+  id: ID!
+  value: String!
+  isCorrect: Boolean!
+  questionId: ID!
+}
+
+type Query {
+  users: [User!]!
+  me: MeResult!
+}
+
+union MeResult = User | CustomResult
+
+type Mutation {
+  register(registerInput: RegisterInput!): CustomResult!
+  login(loginInput: LoginInput!): String!
+  logout: Boolean!
+  revokeRefreshToken(userId: String!): Boolean!
+}
+
+"""New user data"""
+input RegisterInput {
+  email: String!
+  password: String!
+  role: String!
+}
+
+"""Login input data"""
+input LoginInput {
+  email: String!
+  password: String!
+}

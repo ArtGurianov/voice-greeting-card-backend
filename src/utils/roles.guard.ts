@@ -6,6 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import {Reflector} from '@nestjs/core'
+import {GqlContextType, GqlExecutionContext} from '@nestjs/graphql'
 import {JwtService} from '../jwt/jwt.service'
 
 @Injectable()
@@ -14,6 +15,19 @@ export class RolesGuard implements CanActivate {
     private readonly reflector: Reflector,
     @Inject('JwtService') private readonly jwtService: JwtService,
   ) {}
+
+  getContextAndRequest(context: ExecutionContext) {
+    switch (context.getType<GqlContextType>()) {
+      case 'graphql':
+        const ctx = GqlExecutionContext.create(context)
+        return {ctx: ctx.getContext(), req: ctx.getContext().req}
+      default:
+        return {
+          ctx: context.switchToHttp(),
+          req: context.switchToHttp().getRequest(),
+        }
+    }
+  }
 
   canActivate(context: ExecutionContext): boolean {
     const isPublic = this.reflector.get<boolean>(
@@ -24,7 +38,7 @@ export class RolesGuard implements CanActivate {
       return true
     }
 
-    const req = context.switchToHttp().getRequest()
+    const {ctx, req} = this.getContextAndRequest(context)
     const authHeader = req.headers['authorization']
 
     if (!authHeader) {
@@ -50,11 +64,14 @@ export class RolesGuard implements CanActivate {
           "You don't have permission to access this resource",
         )
       }
+      ctx.jwtPayload = jwtPayload as any
       req.jwtPayload = jwtPayload as any
       return true
     } catch (e) {
       console.log(e)
-      throw new UnauthorizedException('Please login to access this resource!')
+      throw new UnauthorizedException(
+        'Error has occured during parsing your auth token!',
+      )
     }
   }
 }

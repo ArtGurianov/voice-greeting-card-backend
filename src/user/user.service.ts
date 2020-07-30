@@ -12,6 +12,7 @@ import cookie from 'cookie'
 import {Response} from 'express'
 import {Connection} from 'typeorm'
 import {JwtService} from '../jwt/jwt.service'
+import {CustomResult} from '../utils/CustomResult'
 import {entityMap} from '../utils/entityMap'
 import {LoginInput} from './input/user.loginInput'
 import {RegisterInput} from './input/user.registerInput'
@@ -38,7 +39,11 @@ export class UserService {
     }
   }
 
-  async register({email, password, role}: RegisterInput): Promise<boolean> {
+  async register({
+    email,
+    password,
+    role,
+  }: RegisterInput): Promise<CustomResult> {
     const alreadyExists = await this.userRepo.findOne({
       email: email,
     })
@@ -54,7 +59,7 @@ export class UserService {
       throw new InternalServerErrorException('cannot create user')
     }
 
-    return true
+    return new CustomResult({ok: true})
   }
 
   async login({email, password}: LoginInput, res: Response): Promise<string> {
@@ -72,20 +77,8 @@ export class UserService {
     return accessToken
   }
 
-  async me(authorization: string): Promise<any> {
-    if (!authorization || !authorization.length) {
-      throw new UnauthorizedException()
-    }
-
-    const token = authorization.split(' ')[1]
-    if (!token) {
-      throw new UnauthorizedException()
-    }
-    const jwtPayload = this.jwtService.verifyAccessToken(token)
-    if (!jwtPayload) {
-      throw new UnauthorizedException('Invalid jwt.')
-    }
-    const user = await this.userRepo.findOne({id: jwtPayload.userId})
+  async me(userId: string): Promise<any> {
+    const user = await this.userRepo.findOne({id: userId})
     if (!user) throw new NotFoundException()
 
     const roleEntity = await this.connection
