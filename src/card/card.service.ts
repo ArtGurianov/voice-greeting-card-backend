@@ -15,12 +15,12 @@ export class CardService {
       return {issuedBy: userId}
     })
     const result = await this.cardRepo.save(initialDataArray)
-    console.log(`issued cards batch: ${result}`)
-    return []
+    console.log(`issued cards batch: ${JSON.stringify(result)}`)
+    return result.map(each => each.id)
   }
 
-  async getCardData(id: string): Promise<Card> {
-    const card = await this.cardRepo.findOne({id})
+  async getCardData(cardId: string): Promise<Card> {
+    const card = await this.cardRepo.findOne({id: cardId})
     if (!card) throw new NotFoundException()
     return card
   }

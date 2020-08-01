@@ -12,11 +12,11 @@ export class CardResolver {
 
   @Public()
   @Query(() => Card)
-  async getCardData(@Args('id') id: string): Promise<Card> {
-    return await this.cardService.getCardData(id)
+  async getCardData(@Args('cardId') cardId: string): Promise<Card> {
+    return await this.cardService.getCardData(cardId)
   }
 
-  @Roles(UserRoles.ADMIN, UserRoles.DISTRIBUTOR)
+  @Roles(UserRoles.SUPER_ADMIN, UserRoles.ADMIN, UserRoles.DISTRIBUTOR)
   @Mutation(() => [String])
   async issueCardsBatch(
     @Context() {jwtPayload}: MyContext,

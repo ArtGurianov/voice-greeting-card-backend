@@ -8,7 +8,7 @@ import {
 } from 'typeorm'
 import {Question} from './question/question.entity'
 
-ObjectType()
+@ObjectType()
 @Entity('cards')
 export class Card extends BaseEntity {
   @Field(() => ID)
@@ -32,7 +32,7 @@ export class Card extends BaseEntity {
   isRevoked!: boolean
 
   @Field(() => ID)
-  @Column({type: 'uuid'})
+  @Column({type: 'uuid', nullable: true})
   distributorId: string
 
   @Field(() => ID)
@@ -42,7 +42,7 @@ export class Card extends BaseEntity {
   @Field(() => [Question])
   @OneToMany(
     () => Question,
-    q => q.cardId,
+    q => q.cardConnection,
   )
   questions: Promise<Question[]>
 }

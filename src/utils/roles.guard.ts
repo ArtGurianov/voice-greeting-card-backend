@@ -59,6 +59,8 @@ export class RolesGuard implements CanActivate {
 
       if (!acceptedRoles || !acceptedRoles.length) return true
 
+      console.log(jwtPayload)
+
       if (!acceptedRoles.includes(jwtPayload.role)) {
         throw new UnauthorizedException(
           "You don't have permission to access this resource",

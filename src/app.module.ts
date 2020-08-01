@@ -6,6 +6,7 @@ import {TypeOrmModule, TypeOrmModuleAsyncOptions} from '@nestjs/typeorm'
 import {AppController} from './app.controller'
 import {AppService} from './app.service'
 import {AudioModule} from './card/audio/audio.module'
+import {CardModule} from './card/card.module'
 import appConfig from './config/appConfig'
 import {JwtService} from './jwt/jwt.service'
 import {RedisAdapterModule} from './redis/redisAdapter.module'
@@ -63,6 +64,7 @@ import {RolesGuard} from './utils/roles.guard'
     RedisAdapterModule,
     AudioModule,
     UserModule,
+    CardModule,
   ],
   controllers: [AppController],
   providers: [

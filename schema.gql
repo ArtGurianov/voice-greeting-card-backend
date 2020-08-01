@@ -2,11 +2,23 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
+type Question {
   id: ID!
-  email: String!
-  tokenVersion: Float!
-  role: String!
+  title: String!
+  options: [String!]!
+  answer: String!
+  cardId: ID!
+}
+
+type Card {
+  id: ID!
+  isPrinted: Boolean!
+  isActivatedAudio: Boolean!
+  isActivatedQuestions: Boolean!
+  isRevoked: Boolean!
+  distributorId: ID!
+  issuedBy: ID!
+  questions: [Question!]!
 }
 
 type CustomError {
@@ -22,20 +34,15 @@ type CustomResult {
   errors: [CustomError!]
 }
 
-type Question {
+type User {
   id: ID!
-  quizId: ID!
-  options: [Option!]!
-}
-
-type Option {
-  id: ID!
-  value: String!
-  isCorrect: Boolean!
-  questionId: ID!
+  email: String!
+  tokenVersion: Float!
+  role: String!
 }
 
 type Query {
+  getCardData(cardId: String!): Card!
   users: [User!]!
   me: MeResult!
 }
@@ -63,6 +70,7 @@ type Manufacturer {
 }
 
 type Mutation {
+  issueCardsBatch(quantity: Float!): [String!]!
   register(registerInput: RegisterInput!): CustomResult!
   login(loginInput: LoginInput!): CustomResult!
   logout: Boolean!

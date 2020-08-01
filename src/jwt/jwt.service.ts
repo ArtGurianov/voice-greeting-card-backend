@@ -11,7 +11,7 @@ export class JwtService {
 
   createAccessToken(user: User) {
     return sign(
-      {userId: user.id},
+      {userId: user.id, role: user.role},
       this.configService.get<string>('jwtAccessSecret', defaultInsecureKey),
       {expiresIn: '15m'},
     )
