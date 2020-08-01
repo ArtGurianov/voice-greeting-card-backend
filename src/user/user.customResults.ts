@@ -1,5 +1,9 @@
 import {createUnionType} from '@nestjs/graphql'
 import {CustomResult} from '../utils/CustomResult'
+import {Admin} from './admin/admin.entity'
+import {Customer} from './customer/customer.entity'
+import {Distributor} from './distributor/distributor.entity'
+import {Manufacturer} from './manufacturer/manufacturer.entity'
 import {User} from './user.entity'
 
 //TODO: DIFFERENCE BETWEEN ME AND USER (PRIVATE FIELDS)
@@ -13,5 +17,5 @@ export const UserResult = createUnionType({
 // ME RESULT
 export const MeResult = createUnionType({
   name: 'MeResult',
-  types: () => [User, CustomResult],
+  types: () => [Admin, Customer, Distributor, Manufacturer, CustomResult],
 })

@@ -1,15 +1,22 @@
+import {Field, ObjectType} from '@nestjs/graphql'
 import {
   BaseEntity,
   Entity,
-  PrimaryColumn,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm'
+import {User} from '../user.entity'
 
+@ObjectType()
 @Entity('distributors')
 export class Distributor extends BaseEntity {
+  @Field()
   @PrimaryGeneratedColumn('uuid')
   id!: string
 
-  @PrimaryColumn({type: 'uuid', unique: true, nullable: false})
-  userId!: string
+  @Field()
+  @OneToOne(() => User, {cascade: true, onDelete: 'CASCADE', primary: true})
+  @JoinColumn()
+  user: User
 }

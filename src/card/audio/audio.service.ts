@@ -13,6 +13,7 @@ import fetch from 'isomorphic-unfetch'
 import {RedisServiceAdapter} from '../../redis/redisAdapter.service'
 import {REDIS_PREFIXES} from '../../types/redisPrefixes.enum'
 import {defaultInsecureKey} from '../../utils/constants'
+import {CustomError, CustomResult} from '../../utils/CustomResult'
 import {CardRepository} from '../card.repository'
 
 @Injectable()
@@ -44,7 +45,7 @@ export class AudioService {
     cardId: string,
     fileName: string,
     fileSize: number,
-  ): Promise<string> {
+  ): Promise<CustomResult> {
     if (fileSize > 1000000) throw new PayloadTooLargeException()
     if (fileName.split('.').slice(-1)[0] !== 'wav')
       throw new NotAcceptableException()
@@ -52,19 +53,18 @@ export class AudioService {
     const alreadySigned = await this.redisService.get(
       `${REDIS_PREFIXES.UPLOAD_S3}${cardId}`,
     )
-    if (alreadySigned) return alreadySigned
+    if (alreadySigned) return new CustomResult({ok: true, value: alreadySigned})
 
     const card = await this.cardRepo.findOne({id: cardId})
-    if (!card) throw new NotFoundException('card not found')
-    if (card.isActivatedAudio) throw new ConflictException() //want to return CustomResult but can't make union with string. Don't want to cast string into ObjectType
-    // return new CustomResult({
-    //   errors: [
-    //     new CustomError({
-    //       location: 'Card',
-    //       errorMessages: ['this card is already activated'],
-    //     }),
-    //   ],
-    // })
+    if (!card)
+      return new CustomResult({
+        errors: [
+          new CustomError({
+            location: 'Card',
+            errorMessages: ['this card is already activated'],
+          }),
+        ],
+      })
     const s3 = new S3({
       signatureVersion: 'v4',
       region: 'eu-central-1',
@@ -97,40 +97,8 @@ export class AudioService {
       60 * 10,
     )
 
-    return url
+    return new CustomResult({ok: true, value: url})
   }
-
-  // async uploadAudioFile(cardId: string, audiofile: any): Promise<CustomResult> {
-  //   const card = await this.cardRepo.findOne({id: cardId})
-  //   if (!card) throw new NotFoundException('card not found')
-  //   if (card.isActivated)
-  //     return new CustomResult({
-  //       errors: [
-  //         new CustomError({
-  //           location: 'Card',
-  //           errorMessages: ['this card is already activated'],
-  //         }),
-  //       ],
-  //     })
-
-  //   const newId = v4()
-  //   try {
-  //     fs.writeFileSync(`${newId}.wav`, audiofile.buffer)
-  //   } catch (_) {
-  //     throw new InternalServerErrorException('could not upload file')
-  //   }
-
-  //   const savedAudioFileData = this.audioRepo.save({
-  //     url: `${this.configService.get<string>(
-  //       's3BucketKey',
-  //       defaultInsecureKey,
-  //     )}/${newId}`,
-  //   })
-
-  //   if (!savedAudioFileData) throw new InternalServerErrorException()
-
-  //   return new CustomResult({ok: true})
-  // }
 
   async activateCardAudio(cardId: string): Promise<boolean> {
     const card = await this.cardRepo.findOne({id: cardId})
@@ -143,10 +111,11 @@ export class AudioService {
     if (!isPending) throw new NotFoundException()
     await this.redisService.del(`${REDIS_PREFIXES.UPLOAD_S3}${cardId}`)
 
-    const saved = await this.cardRepo.save({...card, isActivatedAudio: true})
-    if (!saved) throw new InternalServerErrorException()
+    const activated = await this.cardRepo.save({
+      ...card,
+      isActivatedAudio: true,
+    })
+    if (!activated) throw new InternalServerErrorException()
     return true
   }
 }
-
-//TODO: audio repo no need at all. audiofile name is the same as cardId. All we need is to toggle AudioSet in CardEntity

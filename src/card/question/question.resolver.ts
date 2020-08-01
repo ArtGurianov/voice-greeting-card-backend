@@ -20,10 +20,11 @@ export class QuestionResolver {
   @Public()
   @Mutation(() => CustomResult)
   @UseFilters(validationFilter)
-  async newQuestion(
+  async saveQuestions(
     @Args('cardId') cardId: string,
-    @Args('questionInput') questions: QuestionInput[],
+    @Args({name: 'questionsInput', type: () => [QuestionInput]})
+    questionsInput: QuestionInput[],
   ): Promise<CustomResult> {
-    return await this.questionService.saveQuestions(cardId, questions)
+    return await this.questionService.saveQuestions(cardId, questionsInput)
   }
 }

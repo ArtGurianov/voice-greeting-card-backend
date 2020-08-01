@@ -3,6 +3,7 @@ import {v4} from 'uuid'
 
 export interface CustomResultInterface {
   ok?: boolean
+  value?: string
   errors?: CustomError[]
 }
 
@@ -31,6 +32,7 @@ export class CustomError {
 export class CustomResult implements CustomResultInterface {
   constructor(data: CustomResultInterface) {
     if (data.ok) this.ok = data.ok
+    if (data.value) this.value = data.value
     if (data.errors) this.errors = data.errors
     this.id = v4()
   }
@@ -40,6 +42,9 @@ export class CustomResult implements CustomResultInterface {
 
   @Field(() => Boolean, {defaultValue: false})
   ok: boolean
+
+  @Field(() => String, {nullable: true})
+  value: string
 
   @Field(() => [CustomError], {nullable: true})
   errors?: CustomError[]

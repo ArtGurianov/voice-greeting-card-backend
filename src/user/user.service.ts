@@ -13,9 +13,10 @@ import {Response} from 'express'
 import {Connection} from 'typeorm'
 import {JwtService} from '../jwt/jwt.service'
 import {CustomResult} from '../utils/CustomResult'
-import {entityMap} from '../utils/entityMap'
+import {entityMap, MyEntitiesType} from '../utils/entityMap'
 import {LoginInput} from './input/user.loginInput'
 import {RegisterInput} from './input/user.registerInput'
+import {MeResult} from './user.customResults'
 import {User} from './user.entity'
 import {UserRepository} from './user.repository'
 
@@ -48,13 +49,10 @@ export class UserService {
       email: email,
     })
     if (alreadyExists) throw new ConflictException('user already exists')
-    const newUser = await this.userRepo.save({email, password})
-    if (!newUser) {
-      throw new InternalServerErrorException('cannot create user')
-    }
+    const newUser = await this.userRepo.create({email, password})
     const newRoleEntity = await this.connection
       .getRepository(entityMap[role])
-      .save({email, userId: newUser.id})
+      .save({user: newUser})
     if (!newRoleEntity) {
       throw new InternalServerErrorException('cannot create user')
     }
@@ -62,7 +60,10 @@ export class UserService {
     return new CustomResult({ok: true})
   }
 
-  async login({email, password}: LoginInput, res: Response): Promise<string> {
+  async login(
+    {email, password}: LoginInput,
+    res: Response,
+  ): Promise<CustomResult> {
     const user = await this.userRepo.findOne({where: {email}})
     if (!user) {
       throw new NotFoundException()
@@ -74,18 +75,19 @@ export class UserService {
     const refreshToken = this.jwtService.createRefreshToken(user)
     this.jwtService.sendRefreshToken(res, refreshToken)
     const accessToken = this.jwtService.createAccessToken(user)
-    return accessToken
+    return new CustomResult({ok: true, value: accessToken})
   }
 
-  async me(userId: string): Promise<any> {
+  async me(userId: string): Promise<typeof MeResult> {
     const user = await this.userRepo.findOne({id: userId})
     if (!user) throw new NotFoundException()
 
     const roleEntity = await this.connection
       .getRepository(entityMap[user.role])
-      .findOne({userId: user.id})
+      .findOne({where: {userId: user.id}})
+    //.find({where: {userId: user.id}, relations: ['user']})
     if (!roleEntity) throw new NotFoundException()
-    return roleEntity
+    return {...roleEntity, user} as MyEntitiesType
   }
 
   async revokeRefreshToken(userId: string): Promise<boolean> {

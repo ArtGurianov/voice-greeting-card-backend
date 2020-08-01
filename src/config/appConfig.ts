@@ -1,4 +1,5 @@
 export default () => ({
+  nodeEnv: process.env.NODE_ENV,
   witaiKey: process.env.WITAI_KEY,
   jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,
@@ -10,4 +11,9 @@ export default () => ({
   awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   awsRegion: process.env.AWS_REGION,
   redisUrl: process.env.REDIS_URL,
+  pgHost: process.env.PG_HOST,
+  pgPort: process.env.PG_PORT,
+  pgUsername: process.env.PG_USERNAME,
+  pgPassword: process.env.PG_PASSWORD,
+  pgDatabase: process.env.PG_DATABASE,
 })

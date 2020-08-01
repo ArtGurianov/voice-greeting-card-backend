@@ -17,7 +17,7 @@ export class AdminService {
   ) {}
 
   async injectSuperAdmin() {
-    const newUser = await this.userRepo.save({
+    const newUser = await this.userRepo.create({
       email: this.configService.get<string>(
         'superAdminEmail',
         defaultInsecureKey,
@@ -28,9 +28,7 @@ export class AdminService {
         defaultInsecureKey,
       ),
     })
-    if (!newUser)
-      throw new InternalServerErrorException('could not create user record')
-    const newAdmin = await this.adminRepo.save({userId: newUser.id})
+    const newAdmin = await this.adminRepo.save({user: newUser})
     if (!newAdmin)
       throw new InternalServerErrorException('could not create admin record')
 

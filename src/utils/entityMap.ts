@@ -5,7 +5,9 @@ import {Customer} from '../user/customer/customer.entity'
 import {Distributor} from '../user/distributor/distributor.entity'
 import {Manufacturer} from '../user/manufacturer/manufacturer.entity'
 
-export const entityMap: Record<UserRoles, Type<{userId: string}>> = {
+export type MyEntitiesType = Admin | Customer | Distributor | Manufacturer
+
+export const entityMap: Record<UserRoles, Type<MyEntitiesType>> = {
   [UserRoles.ADMIN]: Admin,
   [UserRoles.SUPER_ADMIN]: Admin,
   [UserRoles.CUSTOMER]: Customer,

@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common'
 
 @Injectable()
-class RegisterValidationPipe extends ValidationPipe {
+class MyValidationPipe extends ValidationPipe {
   async transform(value: any, metadata: ArgumentMetadata) {
     try {
       await super.transform(value, metadata)
@@ -18,7 +18,7 @@ class RegisterValidationPipe extends ValidationPipe {
   }
 }
 
-export const registerValidationPipe = new RegisterValidationPipe({
+export const validationPipe = new MyValidationPipe({
   exceptionFactory: (errors: ValidationError[]) =>
     new BadRequestException(errors),
 })

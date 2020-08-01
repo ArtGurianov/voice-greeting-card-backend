@@ -18,8 +18,6 @@ async function bootstrap() {
     origin: 'http://localhost:3000',
     credentials: true,
   })
-  //initializing global guard in appModule
-  //app.useGlobalGuards(new RolesGuard(new Reflector()))
   app.enableShutdownHooks()
   await app.listen(8000)
 }

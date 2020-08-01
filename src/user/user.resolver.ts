@@ -1,13 +1,12 @@
-import {UnauthorizedException, UseFilters} from '@nestjs/common'
+import {UseFilters} from '@nestjs/common'
 import {Args, Context, Mutation, Query, Resolver} from '@nestjs/graphql'
 import {MyContext} from '../types/myContext'
 import {CustomResult} from '../utils/CustomResult'
 import {Public} from '../utils/public.decorator'
 import validationFilter from '../utils/validation.filter'
+import {validationPipe} from '../utils/validationPipe'
 import {LoginInput} from './input/user.loginInput'
 import {RegisterInput} from './input/user.registerInput'
-import {loginValidationPipe} from './pipes/user.loginInput.pipe'
-import {registerValidationPipe} from './pipes/user.registerInput.pipe'
 import {MeResult} from './user.customResults'
 import {User} from './user.entity'
 import {UserService} from './user.service'
@@ -26,18 +25,18 @@ export class UserResolver {
   @Mutation(() => CustomResult)
   @UseFilters(validationFilter)
   async register(
-    @Args('registerInput', registerValidationPipe) registerInput: RegisterInput,
+    @Args('registerInput', validationPipe) registerInput: RegisterInput,
   ): Promise<CustomResult> {
     return await this.userService.register(registerInput)
   }
 
   @Public()
-  @Mutation(() => String)
+  @Mutation(() => CustomResult)
   @UseFilters(validationFilter)
   async login(
-    @Args('loginInput', loginValidationPipe) loginInput: LoginInput,
+    @Args('loginInput', validationPipe) loginInput: LoginInput,
     @Context() {res}: MyContext,
-  ): Promise<string> {
+  ): Promise<CustomResult> {
     return await this.userService.login(loginInput, res)
   }
 
@@ -48,8 +47,7 @@ export class UserResolver {
 
   @Query(() => MeResult)
   async me(@Context() {jwtPayload}: MyContext): Promise<typeof MeResult> {
-    if (!jwtPayload) throw new UnauthorizedException()
-    return await this.userService.me(jwtPayload?.userId)
+    return await this.userService.me(jwtPayload!.userId)
   }
 
   @Mutation(() => Boolean)

@@ -18,6 +18,7 @@ type CustomError {
 type CustomResult {
   id: ID!
   ok: Boolean!
+  value: String
   errors: [CustomError!]
 }
 
@@ -39,11 +40,31 @@ type Query {
   me: MeResult!
 }
 
-union MeResult = User | CustomResult
+union MeResult = Admin | Customer | Distributor | Manufacturer | CustomResult
+
+type Admin {
+  id: String!
+  user: User!
+}
+
+type Customer {
+  id: String!
+  user: User!
+}
+
+type Distributor {
+  id: String!
+  user: User!
+}
+
+type Manufacturer {
+  id: String!
+  user: User!
+}
 
 type Mutation {
   register(registerInput: RegisterInput!): CustomResult!
-  login(loginInput: LoginInput!): String!
+  login(loginInput: LoginInput!): CustomResult!
   logout: Boolean!
   revokeRefreshToken(userId: String!): Boolean!
 }
