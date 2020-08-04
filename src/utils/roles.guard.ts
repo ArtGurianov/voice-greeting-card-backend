@@ -45,35 +45,27 @@ export class RolesGuard implements CanActivate {
       throw new UnauthorizedException('Please login to access this resource!')
     }
 
-    try {
-      const token = authHeader.split(' ')[1]
-      console.log(token)
-      const jwtPayload = this.jwtService.verifyAccessToken(token)
-      if (!jwtPayload)
-        throw new UnauthorizedException('Please login to access this resource!')
+    const token = authHeader.split(' ')[1]
+    const jwtPayload = this.jwtService.verifyAccessToken(token)
+    if (!jwtPayload)
+      throw new UnauthorizedException('Please login to access this resource!')
 
-      const acceptedRoles = this.reflector.get<string[]>(
-        'roles',
-        context.getHandler(),
-      )
+    const acceptedRoles = this.reflector.get<string[]>(
+      'roles',
+      context.getHandler(),
+    )
 
-      if (!acceptedRoles || !acceptedRoles.length) return true
-
-      console.log(jwtPayload)
-
-      if (!acceptedRoles.includes(jwtPayload.role)) {
-        throw new UnauthorizedException(
-          "You don't have permission to access this resource",
-        )
-      }
+    if (
+      !acceptedRoles ||
+      !acceptedRoles.length ||
+      acceptedRoles.includes(jwtPayload.role)
+    ) {
       ctx.jwtPayload = jwtPayload as any
       req.jwtPayload = jwtPayload as any
       return true
-    } catch (e) {
-      console.log(e)
-      throw new UnauthorizedException(
-        'Error has occured during parsing your auth token!',
-      )
     }
+    throw new UnauthorizedException(
+      "You don't have permission to access this resource",
+    )
   }
 }

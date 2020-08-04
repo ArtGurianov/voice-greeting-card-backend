@@ -50,23 +50,27 @@ type Query {
 union MeResult = Admin | Customer | Distributor | Manufacturer | CustomResult
 
 type Admin {
-  id: String!
+  id: ID!
   user: User!
+  userId: String!
 }
 
 type Customer {
-  id: String!
+  id: ID!
   user: User!
+  userId: String!
 }
 
 type Distributor {
-  id: String!
+  id: ID!
   user: User!
+  userId: String!
 }
 
 type Manufacturer {
-  id: String!
+  id: ID!
   user: User!
+  userId: String!
 }
 
 type Mutation {

@@ -13,7 +13,7 @@ import {Response} from 'express'
 import {Connection} from 'typeorm'
 import {JwtService} from '../jwt/jwt.service'
 import {CustomResult} from '../utils/CustomResult'
-import {entityMap, MyEntitiesType} from '../utils/entityMap'
+import {entityMap} from '../utils/entityMap'
 import {LoginInput} from './input/user.loginInput'
 import {RegisterInput} from './input/user.registerInput'
 import {MeResult} from './user.customResults'
@@ -79,15 +79,15 @@ export class UserService {
   }
 
   async me(userId: string): Promise<typeof MeResult> {
-    const user = await this.userRepo.findOne({id: userId})
+    const user = await this.userRepo.findOne(userId)
     if (!user) throw new NotFoundException()
 
     const roleEntity = await this.connection
       .getRepository(entityMap[user.role])
       .findOne({where: {userId: user.id}})
-    //.find({where: {userId: user.id}, relations: ['user']})
     if (!roleEntity) throw new NotFoundException()
-    return {...roleEntity, user} as MyEntitiesType
+    roleEntity.user = user
+    return roleEntity
   }
 
   async revokeRefreshToken(userId: string): Promise<boolean> {

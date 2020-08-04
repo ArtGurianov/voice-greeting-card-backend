@@ -15,7 +15,6 @@ export class CardService {
       return {issuedBy: userId}
     })
     const result = await this.cardRepo.save(initialDataArray)
-    console.log(`issued cards batch: ${JSON.stringify(result)}`)
     return result.map(each => each.id)
   }
 
