@@ -19,7 +19,10 @@ export class CardService {
   }
 
   async getCardData(cardId: string): Promise<Card> {
-    const card = await this.cardRepo.findOne({id: cardId})
+    const card = await this.cardRepo.findOne({
+      where: {id: cardId},
+      relations: ['questions'],
+    })
     if (!card) throw new NotFoundException()
     return card
   }

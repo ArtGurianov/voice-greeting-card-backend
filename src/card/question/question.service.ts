@@ -40,7 +40,9 @@ export class QuestionService {
         ],
       })
 
-    const savedQuestions = await this.questionRepo.save(questions)
+    const savedQuestions = await this.questionRepo.save(
+      questions.map(q => ({...q, cardId})),
+    )
 
     if (!savedQuestions) throw new InternalServerErrorException()
 

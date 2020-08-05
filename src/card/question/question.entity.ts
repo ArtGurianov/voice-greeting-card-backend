@@ -33,7 +33,7 @@ export class Question extends BaseEntity {
     c => c.questions,
     {onDelete: 'CASCADE'},
   )
-  cardConnection: Promise<Card>
+  card: Promise<Card>
   @JoinColumn({name: 'cardId'})
   @Field(() => ID)
   @Column('uuid')

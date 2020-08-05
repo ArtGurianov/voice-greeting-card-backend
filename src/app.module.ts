@@ -40,7 +40,7 @@ import {RolesGuard} from './utils/roles.guard'
       inject: [ConfigService],
     }),
     GraphQLModule.forRoot({
-      cors: {origin: 'http://localhost:3000', credentials: true},
+      cors: {origin: 'http://localhost:8000', credentials: true},
       installSubscriptionHandlers: true,
       autoSchemaFile: 'schema.gql',
       //autoSchemaFile: true,
@@ -62,10 +62,13 @@ import {RolesGuard} from './utils/roles.guard'
               nodeEnv !== 'production'
                 ? {
                     colorize: true,
-                    levelFirst: true,
+                    //levelFirst: true,
                     translateTime: 'UTC:mm/dd/yyyy, h:MM:ss TT Z',
+                    level: 'debug',
+                    //useLevelLabels: true,
+                    autoLogging: false,
                   }
-                : {},
+                : {level: 'info'},
           },
         }
       },

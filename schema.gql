@@ -43,6 +43,7 @@ type User {
 
 type Query {
   getCardData(cardId: String!): Card!
+  getQuestions(cardId: String!): [Question!]!
   users: [User!]!
   me: MeResult!
 }
@@ -74,11 +75,27 @@ type Manufacturer {
 }
 
 type Mutation {
+  signS3(audioFileInfo: AudioFileInfoInput!): CustomResult!
+  activateCardAudio(cardId: String!): Boolean!
   issueCardsBatch(quantity: Float!): [String!]!
+  saveQuestions(questionsInput: [QuestionInput!]!, cardId: String!): CustomResult!
   register(registerInput: RegisterInput!): CustomResult!
   login(loginInput: LoginInput!): CustomResult!
   logout: Boolean!
   revokeRefreshToken(userId: String!): Boolean!
+}
+
+input AudioFileInfoInput {
+  cardId: String!
+  fileName: String!
+  fileSize: Float!
+}
+
+"""Set card data"""
+input QuestionInput {
+  title: String!
+  options: [String!]!
+  answer: String!
 }
 
 """New user data"""

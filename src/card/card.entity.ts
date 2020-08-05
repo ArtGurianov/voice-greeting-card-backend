@@ -42,7 +42,7 @@ export class Card extends BaseEntity {
   @Field(() => [Question])
   @OneToMany(
     () => Question,
-    q => q.cardConnection,
+    q => q.card,
   )
   questions: Promise<Question[]>
 }

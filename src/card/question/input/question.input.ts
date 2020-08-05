@@ -8,7 +8,7 @@ export class QuestionInput implements Partial<Question> {
   @IsString()
   title: string
 
-  @Field()
+  @Field(() => [String])
   @IsString({each: true})
   options: string[]
 
