@@ -1,6 +1,7 @@
 import {Injectable, InternalServerErrorException} from '@nestjs/common'
 import {ConfigService} from '@nestjs/config'
 import {InjectRepository} from '@nestjs/typeorm'
+import {Logger} from 'nestjs-pino'
 import {UserRoles} from '../../types/roles'
 import {defaultInsecureKey} from '../../utils/constants'
 import {UserRepository} from '../user.repository'
@@ -14,6 +15,7 @@ export class AdminService {
     @InjectRepository(AdminRepository)
     private readonly adminRepo: AdminRepository,
     private readonly configService: ConfigService,
+    private readonly logger: Logger,
   ) {}
 
   async injectSuperAdmin() {
@@ -32,7 +34,7 @@ export class AdminService {
     if (!newAdmin)
       throw new InternalServerErrorException('could not create admin record')
 
-    console.log(
+    this.logger.log(
       `Super Admin created. Please login with: ${this.configService.get<string>(
         'superAdminEmail',
         defaultInsecureKey,

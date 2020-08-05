@@ -3,6 +3,7 @@ import {ConfigModule, ConfigService} from '@nestjs/config'
 import {APP_GUARD} from '@nestjs/core'
 import {GraphQLModule} from '@nestjs/graphql'
 import {TypeOrmModule, TypeOrmModuleAsyncOptions} from '@nestjs/typeorm'
+import {LoggerModule} from 'nestjs-pino'
 import {AppController} from './app.controller'
 import {AppService} from './app.service'
 import {AudioModule} from './card/audio/audio.module'
@@ -20,6 +21,7 @@ import {RolesGuard} from './utils/roles.guard'
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
+        const nodeEnv = configService.get<string>('nodeEnv', defaultInsecureKey)
         return {
           type: 'postgres',
           //name: 'someName', //DO NOT PROVIDE NAME! forFeature(ENTITY) will cause naming problem.
@@ -28,21 +30,9 @@ import {RolesGuard} from './utils/roles.guard'
           username: configService.get<string>('pgUsername', defaultInsecureKey),
           password: configService.get<string>('pgPassword', defaultInsecureKey),
           database: configService.get<string>('pgDatabase', defaultInsecureKey),
-          synchronize:
-            configService.get<string>('nodeEnv', defaultInsecureKey) ===
-            'production'
-              ? false
-              : true,
-          dropSchema:
-            configService.get<string>('nodeEnv', defaultInsecureKey) ===
-            'production'
-              ? false
-              : true,
-          logging:
-            configService.get<string>('nodeEnv', defaultInsecureKey) ===
-            'production'
-              ? false
-              : true,
+          synchronize: nodeEnv === 'production' ? false : true,
+          dropSchema: nodeEnv === 'production' ? false : true,
+          logging: nodeEnv === 'production' ? false : true,
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
           subscribers: [__dirname + '/**/*.subscriber{.ts,.js}'],
         } as TypeOrmModuleAsyncOptions
@@ -60,6 +50,25 @@ import {RolesGuard} from './utils/roles.guard'
         req,
         res,
       }),
+    }),
+    LoggerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const nodeEnv = configService.get<string>('nodeEnv', defaultInsecureKey)
+        return {
+          pinoHttp: {
+            prettyPrint:
+              nodeEnv !== 'production'
+                ? {
+                    colorize: true,
+                    levelFirst: true,
+                    translateTime: 'UTC:mm/dd/yyyy, h:MM:ss TT Z',
+                  }
+                : {},
+          },
+        }
+      },
     }),
     RedisAdapterModule,
     AudioModule,
