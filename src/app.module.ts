@@ -39,17 +39,27 @@ import {RolesGuard} from './utils/roles.guard'
       },
       inject: [ConfigService],
     }),
-    GraphQLModule.forRoot({
-      cors: {origin: 'http://localhost:8000', credentials: true},
-      installSubscriptionHandlers: true,
-      autoSchemaFile: 'schema.gql',
-      //autoSchemaFile: true,
-      //path: path.join(process.cwd(), 'src/schema.gql'),
-      playground: true,
-      context: ({req, res}) => ({
-        req,
-        res,
+    GraphQLModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        cors: {
+          origin: configService.get<string>(
+            'frontendHostUrl',
+            defaultInsecureKey,
+          ),
+          credentials: true,
+        },
+        installSubscriptionHandlers: true,
+        autoSchemaFile: 'schema.gql',
+        //autoSchemaFile: true,
+        //path: path.join(process.cwd(), 'src/schema.gql'),
+        playground: true,
+        context: ({req, res}) => ({
+          req,
+          res,
+        }),
       }),
+      inject: [ConfigService],
     }),
     LoggerModule.forRootAsync({
       imports: [ConfigModule],

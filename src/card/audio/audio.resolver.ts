@@ -1,8 +1,9 @@
-import {Args, Mutation} from '@nestjs/graphql'
+import {Args, Mutation, Resolver} from '@nestjs/graphql'
 import {CustomResult} from '../../utils/CustomResult'
 import {Public} from '../../utils/public.decorator'
 import {AudioService} from './audio.service'
 import {AudioFileInfoInput} from './input/audioFileInfo.input'
+@Resolver()
 export class AudioResolver {
   constructor(private readonly audioService: AudioService) {}
 
@@ -16,8 +17,10 @@ export class AudioResolver {
   }
 
   @Public()
-  @Mutation(() => Boolean)
-  async activateCardAudio(@Args('cardId') cardId: string): Promise<boolean> {
+  @Mutation(() => CustomResult)
+  async activateCardAudio(
+    @Args('cardId') cardId: string,
+  ): Promise<CustomResult> {
     return await this.audioService.activateCardAudio(cardId)
   }
 }

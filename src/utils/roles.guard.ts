@@ -42,13 +42,14 @@ export class RolesGuard implements CanActivate {
     const authHeader = req.headers['authorization']
 
     if (!authHeader) {
-      throw new UnauthorizedException('Please login to access this resource!')
+      throw new UnauthorizedException(
+        'No auth header included in your request!',
+      )
     }
 
     const token = authHeader.split(' ')[1]
     const jwtPayload = this.jwtService.verifyAccessToken(token)
-    if (!jwtPayload)
-      throw new UnauthorizedException('Please login to access this resource!')
+    if (!jwtPayload) throw new UnauthorizedException('Invalid jwt!')
 
     const acceptedRoles = this.reflector.get<string[]>(
       'roles',

@@ -15,7 +15,7 @@ async function bootstrap() {
   )
   app.set('trust proxy', 1)
   app.enableCors({
-    origin: 'http://localhost:8000',
+    origin: process.env.FRONTEND_HOST_URL,
     credentials: true,
   })
   app.enableShutdownHooks()

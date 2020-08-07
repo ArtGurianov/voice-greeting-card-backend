@@ -1,5 +1,6 @@
 export default () => ({
   nodeEnv: process.env.NODE_ENV,
+  frontendHostUrl: process.env.FRONTEND_HOST_URL,
   witaiKey: process.env.WITAI_KEY,
   jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,

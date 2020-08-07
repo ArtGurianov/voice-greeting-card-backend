@@ -1,5 +1,4 @@
 import {
-  ConflictException,
   Injectable,
   InternalServerErrorException,
   NotAcceptableException,
@@ -100,10 +99,18 @@ export class AudioService {
     return new CustomResult({ok: true, value: url})
   }
 
-  async activateCardAudio(cardId: string): Promise<boolean> {
+  async activateCardAudio(cardId: string): Promise<CustomResult> {
     const card = await this.cardRepo.findOne({id: cardId})
     if (!card) throw new NotFoundException('card not found')
-    if (card.isActivatedAudio) throw new ConflictException() //want to return CustomResult but can't make union with string. Don't want to cast string into ObjectType
+    if (card.isActivatedAudio)
+      return new CustomResult({
+        errors: [
+          new CustomError({
+            location: 'Card',
+            errorMessages: ['audio file for this card already exists'],
+          }),
+        ],
+      })
 
     const isPending = await this.redisService.get(
       `${REDIS_PREFIXES.UPLOAD_S3}${cardId}`,
@@ -116,6 +123,6 @@ export class AudioService {
       isActivatedAudio: true,
     })
     if (!activated) throw new InternalServerErrorException()
-    return true
+    return new CustomResult({ok: true})
   }
 }

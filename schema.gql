@@ -76,7 +76,7 @@ type Manufacturer {
 
 type Mutation {
   signS3(audioFileInfo: AudioFileInfoInput!): CustomResult!
-  activateCardAudio(cardId: String!): Boolean!
+  activateCardAudio(cardId: String!): CustomResult!
   issueCardsBatch(quantity: Float!): [String!]!
   saveQuestions(questionsInput: [QuestionInput!]!, cardId: String!): CustomResult!
   register(registerInput: RegisterInput!): CustomResult!
