@@ -1,7 +1,12 @@
-import {Injectable, InternalServerErrorException} from '@nestjs/common'
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  LoggerService,
+} from '@nestjs/common'
 import {ConfigService} from '@nestjs/config'
 import {InjectRepository} from '@nestjs/typeorm'
-import {Logger} from 'nestjs-pino'
+import {WINSTON_MODULE_NEST_PROVIDER} from 'nest-winston'
 import {UserRoles} from '../../types/roles'
 import {defaultInsecureKey} from '../../utils/constants'
 import {UserRepository} from '../user.repository'
@@ -15,7 +20,8 @@ export class AdminService {
     @InjectRepository(AdminRepository)
     private readonly adminRepo: AdminRepository,
     private readonly configService: ConfigService,
-    private readonly logger: Logger,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
   ) {}
 
   async injectSuperAdmin() {

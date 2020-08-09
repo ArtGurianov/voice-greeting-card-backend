@@ -17,4 +17,5 @@ export default () => ({
   pgUsername: process.env.PG_USERNAME,
   pgPassword: process.env.PG_PASSWORD,
   pgDatabase: process.env.PG_DATABASE,
+  pgTestDatabase: process.env.PG_TEST_DATABASE,
 })

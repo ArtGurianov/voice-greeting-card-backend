@@ -24,5 +24,10 @@
     "typeRoots": ["src/typings", "node_modules/@types"]
   },
   "exclude": ["node_modules", "dist"],
-  "include": ["./src/**/*.tsx", "./src/**/*.ts"]
+  "include": [
+    "./src/**/*.tsx",
+    "./src/**/*.ts",
+    "./test/**/*.tsx",
+    "./test/**/*.ts"
+  ]
 }
