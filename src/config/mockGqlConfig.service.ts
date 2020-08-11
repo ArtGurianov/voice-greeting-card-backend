@@ -4,7 +4,7 @@ import {GqlModuleOptions, GqlOptionsFactory} from '@nestjs/graphql'
 import {defaultInsecureKey} from '../utils/constants'
 
 @Injectable()
-export class GqlConfigService implements GqlOptionsFactory {
+export class MockGqlConfigService implements GqlOptionsFactory {
   public constructor(private readonly configService: ConfigService) {}
   createGqlOptions(): GqlModuleOptions {
     return {
@@ -17,7 +17,7 @@ export class GqlConfigService implements GqlOptionsFactory {
       },
       installSubscriptionHandlers: true,
       autoSchemaFile: 'schema.gql',
-      playground: true,
+      playground: false,
       context: ({req, res}) => ({
         req,
         res,

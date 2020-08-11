@@ -5,7 +5,7 @@ import {AdminService} from './admin.service'
 export class AdminController implements OnApplicationBootstrap {
   constructor(private readonly adminService: AdminService) {}
 
-  onApplicationBootstrap() {
-    this.adminService.injectSuperAdmin()
+  async onApplicationBootstrap() {
+    await this.adminService.injectSuperAdmin()
   }
 }
