@@ -17,6 +17,7 @@ import {JwtService} from '../src/jwt/jwt.service'
 import {RedisAdapterModule} from '../src/redis/redisAdapter.module'
 import {UserModule} from '../src/user/user.module'
 import {RolesGuard} from '../src/utils/roles.guard'
+import {registerCustomerMutation, usersQuery} from './testQueries'
 
 describe('AppController (e2e)', () => {
   let app: INestApplication
@@ -66,14 +67,6 @@ describe('AppController (e2e)', () => {
     expect(response.text).toEqual('Hello World!')
   })
 
-  const usersQuery = `
-  query {
-    users {
-      id
-      role
-    }
-  }`
-
   it('/graphql (POST) query:users', async () => {
     return request(httpServer)
       .post('/graphql')
@@ -90,6 +83,20 @@ describe('AppController (e2e)', () => {
         expect(users.length).not.toEqual(0)
         expect(users[0]).toHaveProperty('role')
         expect(users[0].role).toEqual('SUPER_ADMIN')
+      })
+  })
+
+  it('/graphql (POST) mutation:register', async () => {
+    return request(httpServer)
+      .post('/graphql')
+      .send({
+        operationName: null,
+        variables: {},
+        query: registerCustomerMutation,
+      })
+      .expect(200)
+      .expect(({body}) => {
+        expect(body.data.register.ok).toBeTruthy
       })
   })
 })
