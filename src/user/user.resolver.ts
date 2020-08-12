@@ -1,6 +1,6 @@
 import {UseFilters} from '@nestjs/common'
 import {Args, Context, Mutation, Query, Resolver} from '@nestjs/graphql'
-import {MyContext} from '../types/myContext'
+import {MyContext} from '../types/MyContext'
 import {CustomResult} from '../utils/CustomResult'
 import {Public} from '../utils/public.decorator'
 import validationFilter from '../utils/validation.filter'

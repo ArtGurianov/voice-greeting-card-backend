@@ -1,5 +1,5 @@
 import {Args, Context, Mutation, Query, Resolver} from '@nestjs/graphql'
-import {MyContext} from '../types/myContext'
+import {MyContext} from '../types/MyContext'
 import {UserRoles} from '../types/roles'
 import {Public} from '../utils/public.decorator'
 import {Roles} from '../utils/roles.decorator'
