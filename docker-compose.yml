@@ -12,7 +12,7 @@ services:
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
       - 9229:9229
-    command: npm run start:dev
+    command: npm run start:debug
     env_file:
       - .env
     networks:
@@ -35,7 +35,6 @@ services:
       POSTGRES_USER: ${PG_USERNAME}
       POSTGRES_DB: ${PG_DATABASE}
       PG_DATA: /var/lib/postgresql/data
-      POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - 5432:5432
     volumes:
