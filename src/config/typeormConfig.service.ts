@@ -10,7 +10,7 @@ import {defaultInsecureKey} from '../utils/constants'
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   public constructor(private readonly configService: ConfigService) {
-    this.nodeEnv = configService.get<string>('nodeEnv', 'development')
+    this.nodeEnv = configService.get<string>('nodeEnv', defaultInsecureKey)
   }
 
   private readonly nodeEnv: string
@@ -18,7 +18,6 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
       type: 'postgres',
-      //name: 'someName', //DO NOT PROVIDE NAME! forFeature(ENTITY) will cause naming problem.
       host: this.configService.get<string>('pgHost', defaultInsecureKey),
       port: this.configService.get<string>('pgPort', defaultInsecureKey),
       username: this.configService.get<string>(
@@ -33,15 +32,17 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
         'pgDatabase',
         defaultInsecureKey,
       ),
-      synchronize: this.nodeEnv === 'production' ? false : true,
-      dropSchema: this.nodeEnv === 'production' ? false : true,
-      logging: this.nodeEnv === 'production' ? false : true,
+      synchronize: this.nodeEnv === 'development' ? true : false,
+      dropSchema: this.nodeEnv === 'development' ? true : false,
+      logging: this.nodeEnv === 'development' ? true : false,
       keepConnectionAlive: true,
-      //migrations: [],
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       subscribers: [__dirname + '/../**/*.subscriber{.ts,.js}'],
-      //entities: ['dist/**/*.entity{.ts,.js}'],
-      //subscribers: ['dist/**/*.subscriber{.ts,.js}'],
+      migrations: [__dirname + '/../**/*.migration{.ts,.js}'],
+      cli: {
+        migrationsDir: __dirname + '/../migrations',
+        //   subscribersDir: __dirname + '/../subscribers',
+      },
     } as TypeOrmModuleAsyncOptions
   }
 }
