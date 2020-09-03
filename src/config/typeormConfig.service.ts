@@ -18,21 +18,22 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
       type: 'postgres',
+      url: this.configService.get<string>('pgUrl', defaultInsecureKey),
       //name: 'someName', //DO NOT PROVIDE NAME! forFeature(ENTITY) will cause naming problem.
-      host: this.configService.get<string>('pgHost', defaultInsecureKey),
-      port: this.configService.get<string>('pgPort', defaultInsecureKey),
-      username: this.configService.get<string>(
-        'pgUsername',
-        defaultInsecureKey,
-      ),
-      password: this.configService.get<string>(
-        'pgPassword',
-        defaultInsecureKey,
-      ),
-      database: this.configService.get<string>(
-        'pgDatabase',
-        defaultInsecureKey,
-      ),
+      //host: this.configService.get<string>('pgHost', defaultInsecureKey),
+      //port: this.configService.get<string>('pgPort', defaultInsecureKey),
+      // username: this.configService.get<string>(
+      //   'pgUsername',
+      //   defaultInsecureKey,
+      // ),
+      // password: this.configService.get<string>(
+      //   'pgPassword',
+      //   defaultInsecureKey,
+      // ),
+      // database: this.configService.get<string>(
+      //   'pgDatabase',
+      //   defaultInsecureKey,
+      // ),
       synchronize: this.nodeEnv === 'production' ? false : true,
       dropSchema: this.nodeEnv === 'production' ? false : true,
       logging: this.nodeEnv === 'production' ? false : true,

@@ -10,8 +10,8 @@ import {AppController} from '../src/app.controller'
 import {AppService} from '../src/app.service'
 import {CardModule} from '../src/card/card.module'
 import appConfig from '../src/config/appConfig'
-import {MockGqlConfigService} from '../src/config/mockGqlConfig.service'
-import {MockTypeOrmConfigService} from '../src/config/mockTypeormConfig.service'
+import {GqlConfigService} from '../src/config/gqlConfig.service'
+import {TypeOrmConfigService} from '../src/config/typeormConfig.service'
 import {WinstonConfigService} from '../src/config/winstonConfig.service'
 import {JwtService} from '../src/jwt/jwt.service'
 import {RedisAdapterModule} from '../src/redis/redisAdapter.module'
@@ -28,11 +28,11 @@ describe('AppController (e2e)', () => {
         ConfigModule.forRoot({load: [appConfig]}),
         TypeOrmModule.forRootAsync({
           imports: [ConfigModule],
-          useClass: MockTypeOrmConfigService,
+          useClass: TypeOrmConfigService,
         }),
         GraphQLModule.forRootAsync({
           imports: [ConfigModule],
-          useClass: MockGqlConfigService,
+          useClass: GqlConfigService,
         }),
         WinstonModule.forRootAsync({
           imports: [ConfigModule],
