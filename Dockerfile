@@ -11,7 +11,7 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY .env.${NODE_ENV} ./.env
+COPY .env.development ./.env
 
 COPY . .
 
@@ -22,4 +22,5 @@ COPY . .
 #RUN if [ "$NODE_ENV" = "testing" ]; then npm run test:e2e-ci; fi
 
 #just run testing case and compose will override if it's development? maybe
-RUN npm run test:e2e-ci
+#RUN npm run test:e2e-ci
+CMD ["npm", "test:e2e-ci"]
