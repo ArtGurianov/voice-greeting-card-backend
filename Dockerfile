@@ -1,29 +1,25 @@
-FROM node:12.13-alpine As development
+#for testing and development
+FROM node:12.13-alpine
 
-WORKDIR /usr/src/app
-
-COPY package*.json ./
-
-
-RUN npm install
-
-COPY . .
-
-RUN npm run build
-
-FROM node:12.13-alpine as production
-
-ARG NODE_ENV=production
+# docker build --build-arg NODE_ENV=value
+ARG NODE_ENV
 ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm install --only=production
+RUN npm install
+
+COPY .env.${NODE_ENV} ./.env
 
 COPY . .
 
-COPY --from=development /usr/src/app/dist ./dist
+#command from compose is the same. No need to repeat here?
+#RUN if [ "$NODE_ENV" = "development" ]; then npm run start:debug; fi
 
-CMD ["node", "dist/main"]
+#probably no need to check these:
+#RUN if [ "$NODE_ENV" = "testing" ]; then npm run test:e2e-ci; fi
+
+#just run testing case and compose will override if it's development? maybe
+RUN npm run test:e2e-ci

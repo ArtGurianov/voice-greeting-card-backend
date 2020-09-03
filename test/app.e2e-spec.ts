@@ -1,22 +1,7 @@
 import {HttpServer, INestApplication} from '@nestjs/common'
-import {ConfigModule} from '@nestjs/config'
-import {APP_GUARD} from '@nestjs/core'
-import {GraphQLModule} from '@nestjs/graphql'
 import {Test, TestingModule} from '@nestjs/testing'
-import {TypeOrmModule} from '@nestjs/typeorm'
-import {WinstonModule} from 'nest-winston'
 import request from 'supertest'
-import {AppController} from '../src/app.controller'
-import {AppService} from '../src/app.service'
-import {CardModule} from '../src/card/card.module'
-import appConfig from '../src/config/appConfig'
-import {GqlConfigService} from '../src/config/gqlConfig.service'
-import {TypeOrmConfigService} from '../src/config/typeormConfig.service'
-import {WinstonConfigService} from '../src/config/winstonConfig.service'
-import {JwtService} from '../src/jwt/jwt.service'
-import {RedisAdapterModule} from '../src/redis/redisAdapter.module'
-import {UserModule} from '../src/user/user.module'
-import {RolesGuard} from '../src/utils/roles.guard'
+import {AppModule} from '../src/app.module'
 import {registerCustomerMutation, usersQuery} from './testQueries'
 
 describe('AppController (e2e)', () => {
@@ -24,30 +9,7 @@ describe('AppController (e2e)', () => {
   let httpServer: HttpServer
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [
-        ConfigModule.forRoot({load: [appConfig]}),
-        TypeOrmModule.forRootAsync({
-          imports: [ConfigModule],
-          useClass: TypeOrmConfigService,
-        }),
-        GraphQLModule.forRootAsync({
-          imports: [ConfigModule],
-          useClass: GqlConfigService,
-        }),
-        WinstonModule.forRootAsync({
-          imports: [ConfigModule],
-          useClass: WinstonConfigService,
-        }),
-        RedisAdapterModule,
-        UserModule,
-        CardModule,
-      ],
-      controllers: [AppController],
-      providers: [
-        AppService,
-        JwtService,
-        {provide: APP_GUARD, useClass: RolesGuard},
-      ],
+      imports: [AppModule],
     }).compile()
 
     app = moduleFixture.createNestApplication()
