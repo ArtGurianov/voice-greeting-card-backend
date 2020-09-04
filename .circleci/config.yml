@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: node:12.13-alpine
 
-    working_directory: ~/test
+    working_directory: ~/usr/src/app
 
     steps:
       - checkout
