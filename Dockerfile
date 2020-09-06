@@ -1,5 +1,5 @@
 #for testing and development
-FROM node:12.13-alpine
+FROM node:12.13-alpine as development
 
 # docker build --build-arg NODE_ENV=value
 ARG NODE_ENV
