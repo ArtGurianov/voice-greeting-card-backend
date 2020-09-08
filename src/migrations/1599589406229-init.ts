@@ -1,12 +1,12 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class init1599551614465 implements MigrationInterface {
-    name = 'init1599551614465'
+export class init1599589406229 implements MigrationInterface {
+    name = 'init1599589406229'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`CREATE TABLE "users" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "email" text NOT NULL, "password" text NOT NULL, "tokenVersion" integer NOT NULL DEFAULT 0, "role" text NOT NULL DEFAULT 'CUSTOMER', CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3" UNIQUE ("email"), CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "questions" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "title" text NOT NULL, "options" text array NOT NULL, "answer" text NOT NULL, "cardId" uuid NOT NULL, CONSTRAINT "PK_08a6d4b0f49ff300bf3a0ca60ac" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "cards" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "isPrinted" boolean NOT NULL DEFAULT false, "isActivatedAudio" boolean NOT NULL DEFAULT false, "isActivatedQuestions" boolean NOT NULL DEFAULT false, "isRevoked" boolean NOT NULL DEFAULT false, "distributorId" uuid, "issuedBy" uuid NOT NULL, CONSTRAINT "PK_5f3269634705fdff4a9935860fc" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "users" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "email" text NOT NULL, "password" text NOT NULL, "tokenVersion" integer NOT NULL DEFAULT 0, "role" text NOT NULL DEFAULT 'CUSTOMER', CONSTRAINT "UQ_97672ac88f789774dd47f7c8be3" UNIQUE ("email"), CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "admins" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "userId" uuid NOT NULL, CONSTRAINT "REL_420cf6d31487d2f341b40d52e3" UNIQUE ("userId"), CONSTRAINT "PK_e3b38270c97a854c48d2e80874e" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "customers" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "userId" uuid NOT NULL, CONSTRAINT "REL_b8512aa9cef03d90ed5744c94d" UNIQUE ("userId"), CONSTRAINT "PK_133ec679a801fab5e070f73d3ea" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "distributors" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "userId" uuid NOT NULL, CONSTRAINT "REL_ab5e8dcf3645029e6a74661ea6" UNIQUE ("userId"), CONSTRAINT "PK_a3741291eb0af96f795b25d90b4" PRIMARY KEY ("id"))`);
@@ -28,9 +28,9 @@ export class init1599551614465 implements MigrationInterface {
         await queryRunner.query(`DROP TABLE "distributors"`);
         await queryRunner.query(`DROP TABLE "customers"`);
         await queryRunner.query(`DROP TABLE "admins"`);
+        await queryRunner.query(`DROP TABLE "users"`);
         await queryRunner.query(`DROP TABLE "cards"`);
         await queryRunner.query(`DROP TABLE "questions"`);
-        await queryRunner.query(`DROP TABLE "users"`);
     }
 
 }

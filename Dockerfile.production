@@ -20,7 +20,11 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
+RUN npm i -g yarn
 RUN npm install --only=production
+
+COPY start.sh /
+RUN chmod +x /start.sh
 
 COPY . .
 COPY .env.${NODE_ENV} ./.env
@@ -29,4 +33,4 @@ COPY --from=development /usr/src/app/dist ./dist
 
 #RUN npm run typeorm migration:run <name>
 
-CMD ["node", "dist/main"]
+CMD ["./start.sh"]

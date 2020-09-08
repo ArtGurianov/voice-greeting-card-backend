@@ -13,7 +13,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   public constructor(private readonly configService: ConfigService) {
     this.nodeEnv = this.configService.get<string>('nodeEnv', defaultInsecureKey)
     this.pgConfig = this.configService.get<PGConfig>('pg', {
-      pgUrl: defaultInsecureKey,
+      pgUrl: '',
     })
   }
 
@@ -24,8 +24,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
     return {
       type: 'postgres',
       url: this.pgConfig.pgUrl,
-      synchronize: false, //this.nodeEnv === 'development' ? true : false,
-      dropSchema: false, //this.nodeEnv === 'development' ? true : false,
+      synchronize: false,
+      dropSchema: false,
       logging: this.nodeEnv === 'development' ? true : false,
       keepConnectionAlive: true,
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],

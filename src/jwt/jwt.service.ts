@@ -26,7 +26,6 @@ export class JwtService {
   }
 
   sendRefreshToken(res: Response, token: string) {
-    //return?
     res.cookie('jid', token, {
       httpOnly: true,
       maxAge: 365 * 24 * 60 * 60 * 1000,

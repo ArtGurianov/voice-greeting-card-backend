@@ -1,11 +1,5 @@
 export interface PGConfig {
   pgUrl: string
-  // pgHost: string
-  // pgPort: number
-  // pgUsername: string
-  // pgPassword: string
-  // pgDatabase: string
-  // pgTestDatabase: string
 }
 
 export default () => ({
@@ -24,11 +18,5 @@ export default () => ({
   redisUrl: process.env.REDIS_URL,
   pg: {
     pgUrl: process.env.PG_URL,
-    // pgHost: process.env.PG_HOST,
-    // pgPort: process.env.PG_PORT,
-    // pgUsername: process.env.PG_USERNAME,
-    // pgPassword: process.env.PG_PASSWORD,
-    // pgDatabase: process.env.PG_DATABASE,
-    // pgTestDatabase: process.env.PG_TEST_DATABASE,
   },
 })
