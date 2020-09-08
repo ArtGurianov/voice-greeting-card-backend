@@ -24,8 +24,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
     return {
       type: 'postgres',
       url: this.pgConfig.pgUrl,
-      synchronize: this.nodeEnv === 'development' ? true : false,
-      dropSchema: this.nodeEnv === 'development' ? true : false,
+      synchronize: false, //this.nodeEnv === 'development' ? true : false,
+      dropSchema: false, //this.nodeEnv === 'development' ? true : false,
       logging: this.nodeEnv === 'development' ? true : false,
       keepConnectionAlive: true,
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
@@ -33,7 +33,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       migrations: [__dirname + '/../**/*.migration{.ts,.js}'],
       cli: {
         migrationsDir: __dirname + '/../migrations',
-        //   subscribersDir: __dirname + '/../subscribers',
+        subscribersDir: __dirname + '/../subscribers',
       },
     } as TypeOrmModuleAsyncOptions
   }

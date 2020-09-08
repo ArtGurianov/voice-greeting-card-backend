@@ -1,12 +1,6 @@
-import {
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-  LoggerService,
-} from '@nestjs/common'
+import {Injectable, InternalServerErrorException} from '@nestjs/common'
 import {ConfigService} from '@nestjs/config'
 import {InjectRepository} from '@nestjs/typeorm'
-import {WINSTON_MODULE_NEST_PROVIDER} from 'nest-winston'
 import {UserRoles} from '../../types/roles'
 import {defaultInsecureKey} from '../../utils/constants'
 import {UserRepository} from '../user.repository'
@@ -20,31 +14,34 @@ export class AdminService {
     @InjectRepository(AdminRepository)
     private readonly adminRepo: AdminRepository,
     private readonly configService: ConfigService,
-    @Inject(WINSTON_MODULE_NEST_PROVIDER)
-    private readonly logger: LoggerService,
   ) {}
 
-  async injectSuperAdmin() {
+  async injectSuperAdmin(): Promise<string> {
+    const superAdminEmail = this.configService.get<string>(
+      'superAdminEmail',
+      defaultInsecureKey,
+    )
+    const superAdmin = await this.userRepo.findOne({
+      email: superAdminEmail,
+    })
+
+    if (superAdmin) return superAdmin.id
+
     const newUser = await this.userRepo.create({
-      email: this.configService.get<string>(
-        'superAdminEmail',
-        defaultInsecureKey,
-      ),
+      email: superAdminEmail,
       role: UserRoles.SUPER_ADMIN,
       password: this.configService.get<string>(
         'superAdminPassword',
         defaultInsecureKey,
       ),
     })
-    const newAdmin = await this.adminRepo.save({user: newUser})
-    if (!newAdmin)
+    if (!newUser)
+      throw new InternalServerErrorException('could not create user record')
+
+    const newSuperAdmin = await this.adminRepo.save({user: newUser})
+    if (!newSuperAdmin)
       throw new InternalServerErrorException('could not create admin record')
 
-    this.logger.log(
-      `Super Admin created. Please login with: ${this.configService.get<string>(
-        'superAdminEmail',
-        defaultInsecureKey,
-      )}`,
-    )
+    return newSuperAdmin.id
   }
 }

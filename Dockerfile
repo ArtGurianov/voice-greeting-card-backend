@@ -9,18 +9,20 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm i -g yarn
+RUN yarn install
+
+COPY start.sh /
+RUN chmod +x /start.sh
 
 COPY .env.development ./.env
 
 COPY . .
 
-#command from compose is the same. No need to repeat here?
-#RUN if [ "$NODE_ENV" = "development" ]; then npm run start:debug; fi
-
-#probably no need to check these:
-#RUN if [ "$NODE_ENV" = "testing" ]; then npm run test:e2e-ci; fi
-
 #just run testing case and compose will override if it's development? maybe
 #RUN npm run test:e2e-ci
-CMD ["npm", "test:e2e-ci"]
+#CMD ["npm", "test:e2e-ci"]
+
+#
+#ENTRYPOINT ["/start.sh"]
+CMD ["/start.sh"]

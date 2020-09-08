@@ -27,6 +27,6 @@ COPY .env.${NODE_ENV} ./.env
 
 COPY --from=development /usr/src/app/dist ./dist
 
-#RUN typeorm migration:run <name>
+#RUN npm run typeorm migration:run <name>
 
 CMD ["node", "dist/main"]

@@ -1,11 +1,24 @@
-import {Controller, OnApplicationBootstrap} from '@nestjs/common'
+import {
+  Controller,
+  Inject,
+  LoggerService,
+  OnApplicationBootstrap,
+} from '@nestjs/common'
+import {WINSTON_MODULE_NEST_PROVIDER} from 'nest-winston'
 import {AdminService} from './admin.service'
 
 @Controller()
 export class AdminController implements OnApplicationBootstrap {
-  constructor(private readonly adminService: AdminService) {}
+  constructor(
+    private readonly adminService: AdminService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
+  ) {}
 
   async onApplicationBootstrap() {
-    await this.adminService.injectSuperAdmin()
+    const id = await this.adminService.injectSuperAdmin()
+    if (id) {
+      this.logger.log(`Super admin id: ${id}`)
+    }
   }
 }
