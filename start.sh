@@ -7,6 +7,6 @@ echo "BUILD HAS COMPLETED"
 yarn typeorm migration:run
 echo "MIGRATIONS APPLIED TO SCHEMA"
 
-[ "$NODE_ENV" = "development" ] && npm run start:debug
-[ "$NODE_ENV" = "test" ] && npm run test:e2e-ci
-[ "$NODE_ENV" = "production" ] && npm run start:prod
+[ "$NODE_ENV" = "development" ] && yarn start:debug
+[ "$NODE_ENV" = "test" ] && yarn test:e2e-ci
+[ "$NODE_ENV" = "production" ] && yarn start:prod
