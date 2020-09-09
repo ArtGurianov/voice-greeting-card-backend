@@ -1,4 +1,4 @@
-FROM node:12.13-alpine As development
+FROM node:12.13-alpine As temp
 
 WORKDIR /usr/src/app
 
@@ -13,7 +13,7 @@ RUN npm run build
 
 FROM node:12.13-alpine as production
 
-ARG NODE_ENV=production
+ARG NODE_ENV
 ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /usr/src/app
@@ -21,16 +21,14 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 RUN npm i -g yarn
-RUN npm install --only=production
+RUN yarn install --production
+
+COPY .env.${NODE_ENV} ./.env
+COPY . .
+
+COPY --from=temp /usr/src/app/dist ./dist
 
 COPY start.sh /
 RUN chmod +x /start.sh
 
-COPY . .
-COPY .env.${NODE_ENV} ./.env
-
-COPY --from=development /usr/src/app/dist ./dist
-
-#RUN npm run typeorm migration:run <name>
-
-CMD ["./start.sh"]
+CMD ["/start.sh"]

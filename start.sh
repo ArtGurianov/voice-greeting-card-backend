@@ -2,8 +2,6 @@
 
 yarn typeorm migration:generate -n init
 echo "MIGRATIONS ARE GENERATED"
-yarn nest build
-echo "BUILD HAS COMPLETED"
 yarn typeorm migration:run
 echo "MIGRATIONS APPLIED TO SCHEMA"
 

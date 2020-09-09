@@ -13,9 +13,9 @@ module.exports = {
   logging: config.nodeEnv === 'development' ? true : false,
   keepConnectionAlive: true,
   //reading from
-  entities: ['src/**/*.entity{.ts,.js}'],
-  subscribers: ['dist/subscribers/*{.js,.map}'],
-  migrations: ['dist/migrations/*.js'],
+  entities: ['src/**/*.entity.[tj]s'],
+  subscribers: ['src/subscribers/*.[tj]s'],
+  migrations: ['src/migrations/*.[tj]s'],
   cli: {
     //generating to:
     migrationsDir: 'src/migrations',

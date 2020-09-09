@@ -29,9 +29,9 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       logging: this.nodeEnv === 'development' ? true : false,
       keepConnectionAlive: true,
       //entities: getMetadataArgsStorage().tables.map(tbl => tbl.target)
-      entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-      subscribers: [__dirname + '/../**/*.subscriber{.ts,.js}'],
-      migrations: [__dirname + '/../**/*.migration{.ts,.js}'],
+      entities: [__dirname + '/../**/*.entity.[tj]s'],
+      subscribers: [__dirname + '/../**/*.subscriber.[tj]s'],
+      migrations: [__dirname + '/../**/*.migration.[tj]s'],
       cli: {
         migrationsDir: __dirname + '/../migrations',
         subscribersDir: __dirname + '/../subscribers',
