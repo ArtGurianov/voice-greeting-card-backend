@@ -28,6 +28,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       dropSchema: false,
       logging: this.nodeEnv === 'development' ? true : false,
       keepConnectionAlive: true,
+      //entities: getMetadataArgsStorage().tables.map(tbl => tbl.target)
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       subscribers: [__dirname + '/../**/*.subscriber{.ts,.js}'],
       migrations: [__dirname + '/../**/*.migration{.ts,.js}'],

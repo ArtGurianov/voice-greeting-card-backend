@@ -1,10 +1,12 @@
 #!/bin/sh
 
 yarn typeorm migration:generate -n init
-echo "MIGRATIONS HAS BEEN GENERATED"
+echo "MIGRATIONS ARE GENERATED"
 yarn nest build
-echo "BUILD HAS BEEN COMPLETED"
+echo "BUILD HAS COMPLETED"
 yarn typeorm migration:run
-echo "MIGRATIONS HAS BEEN RUN"
-npm run start:debug #dev
-#node dist/main #prod
+echo "MIGRATIONS APPLIED TO SCHEMA"
+
+[ "$NODE_ENV" = "development" ] && npm run start:debug
+[ "$NODE_ENV" = "test" ] && npm run test:e2e-ci
+[ "$NODE_ENV" = "production" ] && npm run start:prod

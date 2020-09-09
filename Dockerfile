@@ -1,7 +1,5 @@
-#for testing and development
-FROM node:12.13-alpine as development
+FROM node:12.13-alpine
 
-# docker build --build-arg NODE_ENV=value
 ARG NODE_ENV
 ENV NODE_ENV=${NODE_ENV}
 
@@ -12,17 +10,11 @@ COPY package*.json ./
 RUN npm i -g yarn
 RUN yarn install
 
-COPY start.sh /
-RUN chmod +x /start.sh
-
-COPY .env.development ./.env
+COPY .env.${NODE_ENV} ./.env
 
 COPY . .
 
-#just run testing case and compose will override if it's development? maybe
-#RUN npm run test:e2e-ci
-#CMD ["npm", "test:e2e-ci"]
+COPY start.sh /
+RUN chmod +x /start.sh
 
-#
-#ENTRYPOINT ["/start.sh"]
 CMD ["/start.sh"]
