@@ -22,6 +22,6 @@ export class AppService implements OnApplicationShutdown {
   }
 
   getHello(): string {
-    return 'Hello World!'
+    return `Welcome to <i><b>voicy.ru</b></i> graphql api. You can play with it by accessing the <a href='https://api.voicy.ru/graphql'>playground</a>! Have fun :)`
   }
 }

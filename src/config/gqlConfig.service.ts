@@ -6,9 +6,9 @@ import {defaultInsecureKey} from '../utils/constants'
 @Injectable()
 export class GqlConfigService implements GqlOptionsFactory {
   public constructor(private readonly configService: ConfigService) {
-    this.nodeEnv = configService.get<string>('nodeEnv', defaultInsecureKey)
+    //this.nodeEnv = configService.get<string>('nodeEnv', defaultInsecureKey)
   }
-  private readonly nodeEnv: string
+  //private readonly nodeEnv: string
   createGqlOptions(): GqlModuleOptions {
     return {
       cors: {
@@ -20,7 +20,7 @@ export class GqlConfigService implements GqlOptionsFactory {
       },
       installSubscriptionHandlers: true,
       autoSchemaFile: 'schema.gql',
-      playground: this.nodeEnv === 'development' ? true : false,
+      playground: true, //this.nodeEnv === 'development' ? true : false,
       context: ({req, res}) => ({
         req,
         res,
