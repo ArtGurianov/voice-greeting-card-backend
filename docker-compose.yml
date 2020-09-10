@@ -6,6 +6,8 @@ services:
     container_name: main
     build:
       context: .
+      target: development
+      #TODO
       args:
         - NODE_ENV=development
     volumes:
@@ -14,8 +16,9 @@ services:
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
       - 9229:9229
+    command: sh -c "/start.sh"
     env_file:
-      - .env.development
+      - .env
     networks:
       - webnet
     depends_on:
@@ -32,7 +35,7 @@ services:
     networks:
       - webnet
     env_file:
-      - .env.development
+      - .env
     ports:
       - 5432:5432
     volumes:

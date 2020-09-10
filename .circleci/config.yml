@@ -25,8 +25,7 @@ jobs:
 
       - run: yarn typeorm migration:generate -n init
       - run: yarn typeorm migration:run
-
-      # run tests!
+      #!rollback!
       - run: yarn test:e2e-ci
 
   deploy:

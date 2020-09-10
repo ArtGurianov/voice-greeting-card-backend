@@ -6,24 +6,24 @@ import {
   TypeOrmOptionsFactory,
 } from '@nestjs/typeorm'
 import {defaultInsecureKey} from '../utils/constants'
-import {PGConfig} from './appConfig'
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   public constructor(private readonly configService: ConfigService) {
     this.nodeEnv = this.configService.get<string>('nodeEnv', defaultInsecureKey)
-    this.pgConfig = this.configService.get<PGConfig>('pg', {
-      pgUrl: '',
-    })
+    this.pgUrl = this.configService.get<string>(
+      'pgUrl',
+      'postgres://postgres:Qwerty123@postgres:5432/postgres',
+    )
   }
 
   private readonly nodeEnv: string
-  private readonly pgConfig: PGConfig
+  private readonly pgUrl: string
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
       type: 'postgres',
-      url: this.pgConfig.pgUrl,
+      url: this.pgUrl,
       synchronize: false,
       dropSchema: false,
       logging: this.nodeEnv === 'development' ? true : false,

@@ -7,7 +7,7 @@ const config = appConfig()
 
 module.exports = {
   type: 'postgres',
-  url: config.pg.pgUrl,
+  url: config.pgUrl,
   synchronize: false,
   dropSchema: false,
   logging: config.nodeEnv === 'development' ? true : false,

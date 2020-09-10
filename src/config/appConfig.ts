@@ -1,9 +1,6 @@
-export interface PGConfig {
-  pgUrl: string
-}
-
 export default () => ({
   nodeEnv: process.env.NODE_ENV,
+  serverPort: process.env.SERVER_PORT,
   frontendHostUrl: process.env.FRONTEND_HOST_URL,
   witaiKey: process.env.WITAI_KEY,
   jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
@@ -16,7 +13,5 @@ export default () => ({
   awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   awsRegion: process.env.AWS_REGION,
   redisUrl: process.env.REDIS_URL,
-  pg: {
-    pgUrl: process.env.PG_URL,
-  },
+  pgUrl: process.env.PG_URL,
 })

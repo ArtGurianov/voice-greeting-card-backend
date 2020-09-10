@@ -24,6 +24,11 @@ async function bootstrap() {
     credentials: true,
   })
   app.enableShutdownHooks()
-  await app.listen(configService.get<number>('serverPort', 8000))
+  await app.listen(
+    configService.get<number>(
+      'serverPort',
+      configService.get<number>('serverPort', 8000),
+    ),
+  )
 }
 bootstrap()
