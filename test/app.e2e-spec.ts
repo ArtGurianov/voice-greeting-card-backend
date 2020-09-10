@@ -26,7 +26,7 @@ describe('AppController (e2e)', () => {
     const response = await request(httpServer)
       .get('/')
       .expect(200)
-    expect(response.text).toEqual('Hello World!')
+    expect(response.text.length).toBeGreaterThan(0)
   })
 
   it('/graphql (POST) query:users', async () => {
