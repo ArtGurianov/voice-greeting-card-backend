@@ -44,14 +44,11 @@ jobs:
 
 workflows:
   version: 2
-
   test-deploy:
     jobs:
       - test:
-        context:
-          - voicy
+        context: voicy
       - deploy:
-        context:
-          - voicy
+        context: voicy
         requires:
           - test
