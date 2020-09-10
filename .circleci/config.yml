@@ -47,8 +47,8 @@ workflows:
   test-deploy:
     jobs:
       - test:
-        context: voicy
+          context: voicy
       - deploy:
-        context: voicy
-        requires:
-          - test
+          context: voicy
+          requires:
+            - test
