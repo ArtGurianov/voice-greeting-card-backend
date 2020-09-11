@@ -57,8 +57,8 @@ jobs:
             - '8b:96:55:a0:61:c6:cb:a0:5f:ee:c0:81:94:d6:13:34'
 
       - run: apk add --no-cache openssh
-      - run: ssh-keyscan -H api.voicy.ru >> ~/.ssh/known_hosts
-      - run: ssh root@api.voicy.ru
+      - run: ssh-keyscan -H 164.90.224.15 >> ~/.ssh/known_hosts
+      - run: ssh root@164.90.224.15
 
 workflows:
   version: 2
