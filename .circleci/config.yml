@@ -80,10 +80,3 @@ workflows:
           requires:
             - test
             - build
-
-workflows:
-  version: 2
-  ssh-connect:
-    jobs:
-      - deploy:
-          context: voicy
