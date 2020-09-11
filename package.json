@@ -20,7 +20,7 @@
     "test:debug": "cross-env NODE_ENV=test node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "cross-env NODE_ENV=test jest --config ./test/jest-e2e.json",
     "test:e2e-ci": "cross-env NODE_ENV=test jest --config ./test/jest-e2e.json --ci --runInBand --detectOpenHandles --forceExit",
-    "docker:build": "docker build -t artgurianov/voicy:latest --build-arg NODE_ENV=production -f Dockerfile.production --no-cache .",
+    "docker:build": "docker build -t artgurianov/voicy:latest --no-cache .",
     "docker:login": "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD",
     "docker:push": "docker push artgurianov/example:latest",
     "ci:docker": "yarn docker:build && yarn docker:login && yarn docker:push",
