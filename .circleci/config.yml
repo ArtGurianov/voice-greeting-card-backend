@@ -55,10 +55,10 @@ jobs:
       - run: apk add --no-cache openssh
       - add_ssh_keys:
           fingerprints:
-            - '75:7d:01:a4:aa:07:4e:c7:08:47:77:b1:c6:f0:13:9b'
+            - 'c8:8d:0b:07:29:52:ca:fd:da:f6:33:89:ba:0f:38:da'
       - run: ssh-keyscan -H 164.90.224.15 >> ~/.ssh/known_hosts
       - run: cat ~/.ssh/known_hosts
-      - run: ssh -vvv root@164.90.224.15
+      - run: ssh -t dokku@164.90.224.15 logs voicy
 
 # workflows:
 #   version: 2
