@@ -24,29 +24,15 @@ jobs:
 
       - run: yarn typeorm migration:generate -n init
       - run: yarn typeorm migration:run
-      #!rollback!
+      #!add rollback!
       - run: yarn test:e2e-ci
 
-  deploy:
+  build:
     docker:
-      - image: node:12.13-alpine
-
-    working_directory: ~/usr/src/app
+      - image: alpine:3.7
 
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run: yarn install
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-
       - setup_remote_docker
       - run: apk add --no-cache curl
       - run:
@@ -57,8 +43,20 @@ jobs:
             curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
             mv /tmp/docker/* /usr/bin/
-      - run: docker --version
-      - run: yarn ci:docker
+      - run: docker build -t artgurianov/voicy:latest --no-cache .
+      - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+      - run: docker push artgurianov/voicy:latest
+
+  deploy:
+    docker:
+      - image: alpine:3.7
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - 'd0:a5:0b:63:6c:3c:15:44:ff:46:3a:12:0e:3c:1b:7f'
+
+      - run: ssh root@157.230.22.65
 
 workflows:
   version: 2
@@ -66,7 +64,12 @@ workflows:
     jobs:
       - test:
           context: voicy
+      - build:
+          context: voicy
+          requires:
+            - test
       - deploy:
           context: voicy
           requires:
             - test
+            - build
