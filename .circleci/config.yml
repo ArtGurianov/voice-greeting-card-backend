@@ -54,7 +54,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - '8b:96:55:a0:61:c6:cb:a0:5f:ee:c0:81:94:d6:13:34'
+            - '75:7d:01:a4:aa:07:4e:c7:08:47:77:b1:c6:f0:13:9b'
 
       - run: apk add --no-cache openssh
       - run: ssh-keyscan -H 164.90.224.15 >> ~/.ssh/known_hosts
