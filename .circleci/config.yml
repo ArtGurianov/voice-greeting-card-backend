@@ -56,11 +56,12 @@ jobs:
           fingerprints:
             - 'd0:a5:0b:63:6c:3c:15:44:ff:46:3a:12:0e:3c:1b:7f'
 
+      - run: apk add --no-cache openssh
       - run: ssh root@157.230.22.65
 
 workflows:
   version: 2
-  test-deploy:
+  test-build-deploy:
     jobs:
       - test:
           context: voicy
