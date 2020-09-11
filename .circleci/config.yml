@@ -56,7 +56,8 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - '75:7d:01:a4:aa:07:4e:c7:08:47:77:b1:c6:f0:13:9b'
-      - run: ssh-keyscan -H 164.90.224.15 >> ~/.ssh/known_hosts
+      #- run: ssh-keyscan -H 164.90.224.15 >> ~/.ssh/known_hosts
+      - run: cat ~/.ssh/known_hosts
       - run: ssh root@164.90.224.15
 
 # workflows:
