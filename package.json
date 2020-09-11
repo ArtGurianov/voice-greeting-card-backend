@@ -22,7 +22,7 @@
     "test:e2e-ci": "cross-env NODE_ENV=test jest --config ./test/jest-e2e.json --ci --runInBand --detectOpenHandles --forceExit",
     "docker:build": "docker build -t artgurianov/voicy:latest --no-cache .",
     "docker:login": "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD",
-    "docker:push": "docker push artgurianov/example:latest",
+    "docker:push": "docker push artgurianov/voicy:latest",
     "ci:docker": "yarn docker:build && yarn docker:login && yarn docker:push",
     "typeorm": "ts-node --transpile-only -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/config/typeormCliConfig.ts"
   },
