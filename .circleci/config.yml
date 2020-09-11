@@ -59,9 +59,7 @@ jobs:
       - run: ssh-keyscan -H 164.90.224.15 >> ~/.ssh/known_hosts
       - run: echo 'ClientAliveInterval 1200' >> ~/.ssh/config
       - run: echo 'ClientAliveCountMax 3' >> ~/.ssh/config
-      - run: sudo systemctl reload ssh
-      - run: sudo systemctl reload openssh
-      - run: sudo systemctl reload sshd
+      - run: cat ~/.ssh/config
       # - run: ssh -t dokku@164.90.224.15 docker-direct pull artgurianov/voicy:latest
       # - run: ssh -t dokku@164.90.224.15 docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
       # - run: ssh -t tags:deploy voicy latest
