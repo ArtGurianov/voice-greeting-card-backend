@@ -54,10 +54,10 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - 'd0:a5:0b:63:6c:3c:15:44:ff:46:3a:12:0e:3c:1b:7f'
+            - '06:4e:20:c8:3b:8a:d8:c8:77:d4:34:a7:fb:8a:7b:3f'
 
       - run: apk add --no-cache openssh
-      - run: ssh root@157.230.22.65
+      - run: ssh root@164.90.224.15
 
 workflows:
   version: 2

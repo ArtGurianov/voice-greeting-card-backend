@@ -10,26 +10,28 @@ DO steps.
 
 dokku apps:create voicy
 
+POSTGRES SETUP
 sudo dokku plugin:install https://github.com/dokku/dokku-postgres.git postgres
-sudo dokku plugin:install https://github.com/dokku/dokku-redis.git redis
-
 dokku postgres:create voicy-production-pg
-
-dokku redis:create voicy-production-redis
-
 dokku postgres:link voicy-production-pg voicy
-//DATABASE_URL: postgres://postgres:b99bcf9148950087f4e7eafedf501834@dokku-postgres-voicy-production-pg:5432/voicy_production_pg
+//internal DATABASE_URL: postgres://postgres:e35444147366d4e932fc455bce445f3a@dokku-postgres-voicy-production-pg:5432/voicy_production_pg
+dokku postgres:expose voicy-production-pg 17825
+//external DATABASE_URL: postgres://postgres:e35444147366d4e932fc455bce445f3a@api.voicy.ru:17825/voicy_production_pg
 
+REDIS SETUP
+sudo dokku plugin:install https://github.com/dokku/dokku-redis.git redis
+dokku redis:create voicy-production-redis
 dokku redis:link voicy-production-redis voicy
-//REDIS_URL: redis://voicy-production-redis:6ea0f6e361cc53190b9829770c83545b15850d89b9413e15325a841e65da8b33@dokku-redis-voicy-production-redis:6379
+//REDIS_URL: redis://voicy-production-redis:64ad3f0112717bef13b24274d37abc1615aeb11a49d073706579baba13c6f2c3@dokku-redis-voicy-production-redis:6379
 
+CICLECI SETUP
 NEW SSH
-ssh-keygen -m pem
+ssh-keygen -m pem -t rsa -C "artgurianov@yandex.ru"
 // /Users/art/.ssh/voicy-production-circleci-ssh
 
 ADDING SSH TO DOKKU
-cat ~/.ssh/voicy-production-circleci-ssh.pub | ssh root@157.230.22.65 «sudo sshcommand acl-add dokku voicy-production-circleci-ssh»
-//EXEC RESULT - SHA256:n83y0blH+ORoQRBuJyi6ZegYC5txsAGVtCB+tJf7OnA
+cat ~/.ssh/voicy-production-circleci-ssh.pub | ssh root@164.90.224.15 "sudo sshcommand acl-add dokku voicy-production-circleci-ssh"
+//EXEC RESULT - SHA256:XnPlu0irzfTA8pKy0wI3V/wZ77DbCH+iCbVn1BUMug4
 
 ADDING SSH TO CIRCLECI
 cat ~/.ssh/voicy-production-circleci-ssh
@@ -40,11 +42,11 @@ cat ~/.ssh/voicy-production-circleci-ssh
 MANUAL FIRST DEPLOY TO DOKKU.
 
 Locally:
-docker build -t artgurianov/voicy:latest --build-arg NODE_ENV=production -f Dockerfile.production --no-cache .
+docker build -t artgurianov/voicy:latest --no-cache .
 docker push artgurianov/voicy:latest
 
 On dokku server:
-ssh root@157.230.22.65
+ssh root@164.90.224.15
 docker pull artgurianov/voicy:latest
 docker tag artgurianov/voicy:latest dokku/voicy:latest
 dokku tags:deploy voicy latest
@@ -53,9 +55,15 @@ dokku logs voicy
 
 ---
 
+DOKKU SET ENV VARIABLES
+
+dokku config:set voicy NODE_ENV=production SERVER_PORT=8000 FRONTEND_HOST_URL=http://localhost:3000 WITAI_KEY=MCPD2GSCYO77BINHZN7TGOPPQV5OPTHZ JWT_ACCESS_SECRET=secret1 JWT_REFRESH_SECRET=secret2 SUPER_ADMIN_EMAIL=artgurianov@yandex.ru SUPER_ADMIN_PASSWORD=Qwerty123 S3_BUCKET_URL=https://aws.s3/user15132/ S3_BUCKET_NAME=voicy2020 AWS_ACCESS_KEY_ID=AKIAJ2FPUL67J2BKE75A AWS_SECRET_ACCESS_KEY=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 AWS_REGION=eu-central-1
+
+---
+
 DOCKER COMPOSE
-docker-compose --env-file .env.development up --build -V --force-recreate
-docker-compose --env-file .env.development exec postgres psql -U postgres
+docker-compose up --build -V --force-recreate
+#docker-compose --env-file .env exec postgres psql -U postgres
 exec postgres env
 
 DOMAIN SETUP

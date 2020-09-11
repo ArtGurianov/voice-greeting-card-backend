@@ -41,7 +41,7 @@ import {RolesGuard} from './utils/roles.guard'
         AWS_SECRET_ACCESS_KEY: Joi.string(),
         AWS_REGION: Joi.string(),
         REDIS_URL: Joi.string(),
-        PG_URL: Joi.string(),
+        DATABASE_URL: Joi.string(),
       }),
     }),
     TypeOrmModule.forRootAsync({
