@@ -63,7 +63,7 @@ jobs:
       # - run: ls -a ~/
       - run: ssh -t dokku@164.90.224.15 docker-direct pull artgurianov/voicy:latest
       - run: ssh -t dokku@164.90.224.15 docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
-      - run: ssh -t tags:deploy voicy latest
+      - run: ssh -t dokku@164.90.224.15 tags:deploy voicy latest
 
 # workflows:
 #   version: 2
