@@ -67,12 +67,24 @@ workflows:
     jobs:
       - test:
           context: voicy
+          filters:
+            branches:
+              only:
+                - staging
       - build:
           context: voicy
+          filters:
+            branches:
+              only:
+                - staging
           requires:
             - test
       - deploy:
           context: voicy
+          filters:
+            branches:
+              only:
+                - staging
           requires:
             - test
             - build
