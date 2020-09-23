@@ -37,7 +37,7 @@ export class AudioService {
       body: audiofile.buffer,
     })
     const data = await result.json()
-    return data.text ? data.text : 'Введите текст.'
+    return data && data.text ? data.text : 'Введите текст.'
   }
 
   async signS3(
