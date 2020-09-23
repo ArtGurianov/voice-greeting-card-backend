@@ -1,9 +1,6 @@
 version: 2
 jobs:
   test:
-    branches:
-      only:
-        - staging
     docker:
       - image: node:12.13-alpine
 
@@ -31,9 +28,6 @@ jobs:
       - run: yarn test:e2e-ci
 
   build:
-    branches:
-      only:
-        - staging
     docker:
       - image: alpine:3.7
 
@@ -54,9 +48,6 @@ jobs:
       - run: docker push artgurianov/voicy:latest
 
   deploy:
-    branches:
-      only:
-        - staging
     docker:
       - image: alpine:3.7
     steps:
@@ -76,12 +67,24 @@ workflows:
     jobs:
       - test:
           context: voicy
+          filters:
+            branches:
+              only:
+                - staging
       - build:
           context: voicy
+          filters:
+            branches:
+              only:
+                - staging
           requires:
             - test
       - deploy:
           context: voicy
+          filters:
+            branches:
+              only:
+                - staging
           requires:
             - test
             - build
