@@ -22,6 +22,8 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      #first step is pulling a DB backup?
+      - run: python -V
       - run: yarn typeorm migration:generate -n init
       - run: yarn typeorm migration:run
       #!add rollback!
@@ -57,10 +59,6 @@ jobs:
           fingerprints:
             - 'c8:8d:0b:07:29:52:ca:fd:da:f6:33:89:ba:0f:38:da'
       - run: ssh-keyscan -H 164.90.224.15 >> ~/.ssh/known_hosts
-      # - run: echo '  ClientAliveInterval 1200' >> ~/.ssh/config
-      # - run: echo '  ClientAliveCountMax 3' >> ~/.ssh/config
-      # - run: cat ~/.ssh/config
-      # - run: ls -a ~/
       - run: ssh -t dokku@164.90.224.15 docker-direct pull artgurianov/voicy:latest
       - run: ssh -t dokku@164.90.224.15 docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
       - run: ssh -t dokku@164.90.224.15 tags:deploy voicy latest
