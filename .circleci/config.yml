@@ -22,8 +22,6 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      #first step is pulling a DB backup?
-      - run: python -V
       - run: yarn typeorm migration:generate -n init
       - run: yarn typeorm migration:run
       #!add rollback!
