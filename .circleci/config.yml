@@ -56,43 +56,51 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - $SSH_FINGERPRINT
-      - run: ssh-keyscan -H $BACKEND_HOST_URL >> /.ssh/known_hosts
+      - run: mkdir -p ~/.ssh
+      - run: ssh-keyscan -H $BACKEND_HOST_URL >> ~/.ssh/known_hosts
       - run: ssh -t dokku@$BACKEND_HOST_URL docker-direct pull artgurianov/voicy:latest
       - run: ssh -t dokku@$BACKEND_HOST_URL docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
       - run: ssh -t dokku@$BACKEND_HOST_URL tags:deploy voicy latest
 
+# workflows:
+#   version: 2
+#   test:
+#     jobs:
+#       - test:
+#           context: voicy-staging
+#           filters:
+#             branches:
+#               ignore:
+#                 - master
+#                 - staging
+#   build-and-deploy-staging:
+#     jobs:
+#       - build:
+#           context: voicy-staging
+#           filters:
+#             branches:
+#               only:
+#                 - staging
+#       - deploy:
+#           context: voicy-staging
+#           filters:
+#             branches:
+#               only:
+#                 - staging
+#           requires:
+#             - build
+#   deploy-production:
+#     jobs:
+#       - deploy:
+#           context: voicy-production
+#           filters:
+#             branches:
+#               only:
+#                 - master
+
 workflows:
   version: 2
-  test:
-    jobs:
-      - test:
-          context: voicy-staging
-          filters:
-            branches:
-              ignore:
-                - master
-                - staging
   build-and-deploy-staging:
     jobs:
-      - build:
-          context: voicy-staging
-          filters:
-            branches:
-              only:
-                - staging
       - deploy:
           context: voicy-staging
-          filters:
-            branches:
-              only:
-                - staging
-          requires:
-            - build
-  deploy-production:
-    jobs:
-      - deploy:
-          context: voicy-production
-          filters:
-            branches:
-              only:
-                - master
