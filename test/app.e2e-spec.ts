@@ -1,12 +1,16 @@
 import {HttpServer, INestApplication} from '@nestjs/common'
 import {Test, TestingModule} from '@nestjs/testing'
 import request from 'supertest'
+import {Connection, EntityManager, QueryRunner} from 'typeorm'
 import {AppModule} from '../src/app.module'
 import {registerCustomerMutation, usersQuery} from './testQueries'
 
 describe('AppController (e2e)', () => {
   let app: INestApplication
   let httpServer: HttpServer
+  // let em: EntityManager
+  let queryRunner: QueryRunner
+
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -15,11 +19,25 @@ describe('AppController (e2e)', () => {
     app = moduleFixture.createNestApplication()
     httpServer = app.getHttpServer()
     await app.init()
+
+    const dbConnection = moduleFixture.get(Connection)
+    const manager = moduleFixture.get(EntityManager)
+    // eslint-disable-next-line
+    // @ts-ignore
+    queryRunner = manager.queryRunner = dbConnection.createQueryRunner('master')
   })
 
   afterAll(async done => {
     await app.close()
     done()
+  })
+
+  beforeEach(async () => {
+    await queryRunner.startTransaction()
+  })
+
+  afterEach(async () => {
+    await queryRunner.rollbackTransaction()
   })
 
   it('/GET getHello', async () => {
