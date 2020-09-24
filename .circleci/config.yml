@@ -57,34 +57,42 @@ jobs:
           fingerprints:
             - 'c8:8d:0b:07:29:52:ca:fd:da:f6:33:89:ba:0f:38:da'
       - run: ssh-keyscan -H 164.90.224.15 >> ~/.ssh/known_hosts
-      - run: ssh -t dokku@164.90.224.15 docker-direct pull artgurianov/voicy:latest
-      - run: ssh -t dokku@164.90.224.15 docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
-      - run: ssh -t dokku@164.90.224.15 tags:deploy voicy latest
+      - run: ssh -t dokku@$BACKEND_HOST_URL docker-direct pull artgurianov/voicy:latest
+      - run: ssh -t dokku@$BACKEND_HOST_URL docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
+      - run: ssh -t dokku@$BACKEND_HOST_URL tags:deploy voicy latest
 
 workflows:
   version: 2
-  test-build-deploy:
+  test:
     jobs:
       - test:
-          context: voicy
+          context: voicy-staging
           filters:
             branches:
-              only:
+              ignore:
+                - master
                 - staging
+  build-deploy-staging:
+    jobs:
       - build:
-          context: voicy
+          context: voicy-staging
           filters:
             branches:
               only:
                 - staging
-          requires:
-            - test
       - deploy:
-          context: voicy
+          context: voicy-staging
           filters:
             branches:
               only:
                 - staging
           requires:
-            - test
             - build
+  deploy-production:
+    jobs:
+      - deploy:
+          context: voicy-production
+          filters:
+            branches:
+              only:
+                - master
