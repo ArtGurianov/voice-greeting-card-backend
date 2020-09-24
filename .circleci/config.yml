@@ -72,7 +72,7 @@ workflows:
               ignore:
                 - master
                 - staging
-  build-deploy-staging:
+  build-and-deploy-staging:
     jobs:
       - build:
           context: voicy-staging
