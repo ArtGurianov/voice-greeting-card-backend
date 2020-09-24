@@ -56,7 +56,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - $SSH_FINGERPRINT
-      #- run: ssh-keyscan -H $BACKEND_HOST_URL >> ~/.ssh/known_hosts
+      - run: ssh-keyscan -H $BACKEND_HOST_URL >> /.ssh/known_hosts
       - run: ssh -t dokku@$BACKEND_HOST_URL docker-direct pull artgurianov/voicy:latest
       - run: ssh -t dokku@$BACKEND_HOST_URL docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
       - run: ssh -t dokku@$BACKEND_HOST_URL tags:deploy voicy latest
