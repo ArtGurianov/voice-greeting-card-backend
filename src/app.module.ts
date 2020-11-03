@@ -1,21 +1,25 @@
 import Joi from '@hapi/joi'
-import {Module} from '@nestjs/common'
-import {ConfigModule} from '@nestjs/config'
-import {APP_GUARD} from '@nestjs/core'
-import {GraphQLModule} from '@nestjs/graphql'
-import {TypeOrmModule} from '@nestjs/typeorm'
-import {WinstonModule} from 'nest-winston'
-import {AppController} from './app.controller'
-import {AppService} from './app.service'
-import {CardModule} from './card/card.module'
+import { Module } from '@nestjs/common'
+import { ConfigModule } from '@nestjs/config'
+import { APP_GUARD } from '@nestjs/core'
+import { GraphQLModule } from '@nestjs/graphql'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { WinstonModule } from 'nest-winston'
+import { AppController } from './app.controller'
+import { AppService } from './app.service'
+import { CardModule } from './card/card.module'
 import appConfig from './config/appConfig'
-import {GqlConfigService} from './config/gqlConfig.service'
-import {TypeOrmConfigService} from './config/typeormConfig.service'
-import {WinstonConfigService} from './config/winstonConfig.service'
-import {JwtService} from './jwt/jwt.service'
-import {RedisAdapterModule} from './redis/redisAdapter.module'
-import {UserModule} from './user/user.module'
-import {RolesGuard} from './utils/roles.guard'
+import { GqlConfigService } from './config/gqlConfig.service'
+import { TypeOrmConfigService } from './config/typeormConfig.service'
+import { WinstonConfigService } from './config/winstonConfig.service'
+import { JwtService } from './jwt/jwt.service'
+import { RedisAdapterModule } from './redis/redisAdapter.module'
+import { AdminModule } from './user/admin/admin.module'
+import { CustomerModule } from './user/customer/customer.module'
+import { DistributorModule } from './user/distributor/distributor.module'
+import { ManufacturerModule } from './user/manufacturer/manufacturer.module'
+import { UserModule } from './user/user.module'
+import { RolesGuard } from './utils/roles.guard'
 
 @Module({
   imports: [
@@ -59,6 +63,11 @@ import {RolesGuard} from './utils/roles.guard'
     RedisAdapterModule,
     UserModule,
     CardModule,
+    AdminModule,
+    CustomerModule,
+    ManufacturerModule,
+    DistributorModule,
+
   ],
   controllers: [AppController],
   providers: [
