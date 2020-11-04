@@ -1,9 +1,10 @@
-import {Injectable} from '@nestjs/common'
-import {ConfigService} from '@nestjs/config'
-import {Response} from 'express'
-import {sign, verify} from 'jsonwebtoken'
-import {User} from '../user/user.entity'
-import {defaultInsecureKey} from '../utils/constants'
+import { Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { Response } from 'express'
+import { sign, verify } from 'jsonwebtoken'
+import { JwtPayload } from '../types/jwtPayload'
+import { User } from '../user/user.entity'
+import { defaultInsecureKey } from '../utils/constants'
 
 @Injectable()
 export class JwtService {
@@ -33,7 +34,7 @@ export class JwtService {
     })
   }
 
-  verifyAccessToken(jid: string) {
+  verifyAccessToken(jid: string): JwtPayload | null {
     let payload: any
     try {
       payload = verify(

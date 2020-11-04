@@ -1,6 +1,7 @@
-import {Field, ID, ObjectType} from '@nestjs/graphql'
-import {BaseEntity, Column, Entity, PrimaryGeneratedColumn} from 'typeorm'
-import {UserRoles} from '../types/roles'
+import { Field, ID, ObjectType } from '@nestjs/graphql'
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { APPLICATION_STATUS } from '../types/applicationStatus.enum'
+import { UserRoles } from '../types/roles'
 @ObjectType()
 @Entity('users')
 export class User extends BaseEntity {
@@ -22,4 +23,8 @@ export class User extends BaseEntity {
   @Field()
   @Column({type: 'text', default: UserRoles.CUSTOMER})
   role: UserRoles
+
+  @Field()
+  @Column({type: 'text', default: APPLICATION_STATUS.PENDING})
+  status: APPLICATION_STATUS
 }

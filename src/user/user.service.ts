@@ -4,21 +4,23 @@ import {
   InternalServerErrorException,
   NotFoundException,
   ServiceUnavailableException,
-  UnauthorizedException,
+  UnauthorizedException
 } from '@nestjs/common'
-import {InjectConnection, InjectRepository} from '@nestjs/typeorm'
+import { InjectConnection, InjectRepository } from '@nestjs/typeorm'
 import * as bcrypt from 'bcryptjs'
 import cookie from 'cookie'
-import {Response} from 'express'
-import {Connection} from 'typeorm'
-import {JwtService} from '../jwt/jwt.service'
-import {CustomResult} from '../utils/CustomResult'
-import {entityMap} from '../utils/entityMap'
-import {LoginInput} from './input/user.loginInput'
-import {RegisterInput} from './input/user.registerInput'
-import {MeResult} from './user.customResults'
-import {User} from './user.entity'
-import {UserRepository} from './user.repository'
+import { Response } from 'express'
+import { Connection } from 'typeorm'
+import { JwtService } from '../jwt/jwt.service'
+import { APPLICATION_STATUS } from '../types/applicationStatus.enum'
+import { UserRoles } from '../types/roles'
+import { CustomResult } from '../utils/CustomResult'
+import { entityMap } from '../utils/entityMap'
+import { LoginInput } from './input/user.loginInput'
+import { RegisterInput } from './input/user.registerInput'
+import { MeResult } from './user.customResults'
+import { User } from './user.entity'
+import { UserRepository } from './user.repository'
 
 @Injectable()
 export class UserService {
@@ -44,16 +46,27 @@ export class UserService {
     email,
     password,
     role,
-  }: RegisterInput): Promise<CustomResult> {
+  }: RegisterInput, req: Request): Promise<CustomResult> {
     const alreadyExists = await this.userRepo.findOne({
       email: email,
     })
     if (alreadyExists) throw new ConflictException('user already exists')
-    const newUser = await this.userRepo.create({email, password})
-    const newRoleEntity = await this.connection
+
+    let isAdmin = false
+    const authHeader = req.headers.get('authorization')
+      if (authHeader) {
+        const jwtPayload = await this.jwtService.verifyAccessToken(authHeader)
+        if (jwtPayload && jwtPayload.userRole === UserRoles.ADMIN) {
+          isAdmin = true
+        }
+      }
+
+    const newUser = await this.userRepo.create({email, password, status: isAdmin ? APPLICATION_STATUS.CONFIRMED : APPLICATION_STATUS.PENDING})
+  
+    const savedRoleEntity = await this.connection
       .getRepository(entityMap[role])
       .save({user: newUser})
-    if (!newRoleEntity) {
+    if (!savedRoleEntity) {
       throw new InternalServerErrorException('cannot create user')
     }
 

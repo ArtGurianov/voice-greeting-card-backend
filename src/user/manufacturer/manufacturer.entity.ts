@@ -1,13 +1,13 @@
-import {Field, ID, ObjectType} from '@nestjs/graphql'
+import { Field, ID, ObjectType } from '@nestjs/graphql'
 import {
   BaseEntity,
   Column,
   Entity,
   JoinColumn,
   OneToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm'
-import {User} from '../user.entity'
+import { User } from '../user.entity'
 
 @ObjectType()
 @Entity('manufacturers')

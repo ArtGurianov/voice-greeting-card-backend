@@ -1,0 +1,7 @@
+export const enum APPLICATION_STATUS {
+    PENDING = 'PENDING',
+    CONFIRMED = 'CONFIRMED',
+    REJECTED = 'REJECTED',
+    DELETED = 'DELETED',
+  }
+  
