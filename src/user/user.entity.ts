@@ -22,9 +22,11 @@ export class User extends BaseEntity {
 
   @Field()
   @Column({type: 'text', default: UserRoles.CUSTOMER})
+  //@Column({type: 'text'})
   role: UserRoles
 
   @Field()
   @Column({type: 'text', default: APPLICATION_STATUS.PENDING})
+  //@Column({type: 'text'})
   status: APPLICATION_STATUS
 }

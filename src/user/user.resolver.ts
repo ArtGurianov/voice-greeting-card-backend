@@ -1,4 +1,4 @@
-import { Req, UseFilters } from '@nestjs/common'
+import { UseFilters } from '@nestjs/common'
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { MyContext } from '../types/MyContext'
 import { CustomResult } from '../utils/CustomResult'
@@ -25,7 +25,7 @@ export class UserResolver {
   @Mutation(() => CustomResult)
   @UseFilters(validationFilter)
   async register(
-    @Req() req: Request, @Args('registerInput', validationPipe) registerInput: RegisterInput,
+    @Context() {req}: MyContext, @Args('registerInput', validationPipe) registerInput: RegisterInput,
   ): Promise<CustomResult> {
     return await this.userService.register(registerInput, req)
   }

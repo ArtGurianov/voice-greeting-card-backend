@@ -3,11 +3,11 @@ import {
   ExecutionContext,
   Inject,
   Injectable,
-  UnauthorizedException,
+  UnauthorizedException
 } from '@nestjs/common'
-import {Reflector} from '@nestjs/core'
-import {GqlContextType, GqlExecutionContext} from '@nestjs/graphql'
-import {JwtService} from '../jwt/jwt.service'
+import { Reflector } from '@nestjs/core'
+import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql'
+import { JwtService } from '../jwt/jwt.service'
 
 @Injectable()
 export class RolesGuard implements CanActivate {

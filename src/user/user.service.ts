@@ -46,22 +46,24 @@ export class UserService {
     email,
     password,
     role,
-  }: RegisterInput, req: Request): Promise<CustomResult> {
+  }: RegisterInput, req: any): Promise<CustomResult> {
     const alreadyExists = await this.userRepo.findOne({
       email: email,
     })
     if (alreadyExists) throw new ConflictException('user already exists')
 
-    let isAdmin = false
-    const authHeader = req.headers.get('authorization')
+    const userObject = {email, password, role, status: APPLICATION_STATUS.PENDING}
+
+    const authHeader = req.headers['authorization']
       if (authHeader) {
-        const jwtPayload = await this.jwtService.verifyAccessToken(authHeader)
-        if (jwtPayload && jwtPayload.userRole === UserRoles.ADMIN) {
-          isAdmin = true
+        const token = authHeader.split(' ')[1]
+        const jwtPayload = await this.jwtService.verifyAccessToken(token)
+        if (jwtPayload?.role === UserRoles.ADMIN || jwtPayload?.role === UserRoles.SUPER_ADMIN) {
+          userObject.status = APPLICATION_STATUS.CONFIRMED
         }
       }
 
-    const newUser = await this.userRepo.create({email, password, status: isAdmin ? APPLICATION_STATUS.CONFIRMED : APPLICATION_STATUS.PENDING})
+    const newUser = await this.userRepo.create(userObject)
   
     const savedRoleEntity = await this.connection
       .getRepository(entityMap[role])

@@ -1,10 +1,11 @@
-import {Injectable, InternalServerErrorException} from '@nestjs/common'
-import {ConfigService} from '@nestjs/config'
-import {InjectRepository} from '@nestjs/typeorm'
-import {UserRoles} from '../../types/roles'
-import {defaultInsecureKey} from '../../utils/constants'
-import {UserRepository} from '../user.repository'
-import {AdminRepository} from './admin.repository'
+import { Injectable, InternalServerErrorException } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
+import { InjectRepository } from '@nestjs/typeorm'
+import { APPLICATION_STATUS } from '../../types/applicationStatus.enum'
+import { UserRoles } from '../../types/roles'
+import { defaultInsecureKey } from '../../utils/constants'
+import { UserRepository } from '../user.repository'
+import { AdminRepository } from './admin.repository'
 
 @Injectable()
 export class AdminService {
@@ -34,6 +35,7 @@ export class AdminService {
         'superAdminPassword',
         defaultInsecureKey,
       ),
+      status: APPLICATION_STATUS.CONFIRMED
     })
     if (!newUser)
       throw new InternalServerErrorException('could not create user record')
