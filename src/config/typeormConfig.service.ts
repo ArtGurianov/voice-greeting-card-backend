@@ -1,20 +1,20 @@
-import {Injectable} from '@nestjs/common'
-import {ConfigService} from '@nestjs/config'
+import {Injectable} from '@nestjs/common';
+import {ConfigService} from '@nestjs/config';
 import {
   TypeOrmModuleAsyncOptions,
   TypeOrmModuleOptions,
   TypeOrmOptionsFactory,
-} from '@nestjs/typeorm'
-import {defaultInsecureKey} from '../utils/constants'
+} from '@nestjs/typeorm';
+import {defaultInsecureKey} from '../utils/constants';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   public constructor(private readonly configService: ConfigService) {
-    this.nodeEnv = this.configService.get<string>('nodeEnv', defaultInsecureKey)
+    this.nodeEnv = this.configService.get<string>('nodeEnv', defaultInsecureKey);
     this.pgUrl = this.configService.get<string>(
       'pgUrl',
       'postgres://postgres:Qwerty123@postgres:5432/postgres',
-    )
+    );
   }
 
   private readonly nodeEnv: string
@@ -36,6 +36,6 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
         migrationsDir: __dirname + '/../migrations',
         subscribersDir: __dirname + '/../subscribers',
       },
-    } as TypeOrmModuleAsyncOptions
+    } as TypeOrmModuleAsyncOptions;
   }
 }

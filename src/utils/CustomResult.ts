@@ -1,5 +1,5 @@
-import {Field, ID, ObjectType} from '@nestjs/graphql'
-import {v4} from 'uuid'
+import {Field, ID, ObjectType} from '@nestjs/graphql';
+import {v4} from 'uuid';
 
 export interface CustomResultInterface {
   ok?: boolean
@@ -16,9 +16,9 @@ export class CustomError {
     location: string
     errorMessages: string[]
   }) {
-    this.id = v4()
-    this.location = location
-    this.errorMessages = errorMessages
+    this.id = v4();
+    this.location = location;
+    this.errorMessages = errorMessages;
   }
   @Field(() => ID)
   id: string
@@ -31,10 +31,10 @@ export class CustomError {
 @ObjectType()
 export class CustomResult implements CustomResultInterface {
   constructor(data: CustomResultInterface) {
-    if (data.ok) this.ok = data.ok
-    if (data.value) this.value = data.value
-    if (data.errors) this.errors = data.errors
-    this.id = v4()
+    if (data.ok) this.ok = data.ok;
+    if (data.value) this.value = data.value;
+    if (data.errors) this.errors = data.errors;
+    this.id = v4();
   }
 
   @Field(() => ID)

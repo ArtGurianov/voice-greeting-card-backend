@@ -1,5 +1,5 @@
-import {Field, InputType} from '@nestjs/graphql'
-import {IsNumber, IsString, IsUUID, Max} from 'class-validator'
+import {Field, InputType} from '@nestjs/graphql';
+import {IsNumber, IsString, IsUUID, Max} from 'class-validator';
 
 @InputType()
 export class AudioFileInfoInput {

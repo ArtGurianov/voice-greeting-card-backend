@@ -3,7 +3,7 @@ export const usersQuery = `query {
       id
       role
     }
-  }`
+  }`;
 
 export const registerCustomerMutation = `
 mutation {
@@ -11,4 +11,4 @@ mutation {
     id
     ok
   }
-}`
+}`;

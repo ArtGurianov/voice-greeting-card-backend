@@ -1,9 +1,9 @@
-import * as dotenv from 'dotenv'
-import {ConnectionOptions} from 'typeorm'
-import appConfig from './appConfig'
+import * as dotenv from 'dotenv';
+import {ConnectionOptions} from 'typeorm';
+import appConfig from './appConfig';
 
-dotenv.config()
-const config = appConfig()
+dotenv.config();
+const config = appConfig();
 
 module.exports = {
   type: 'postgres',
@@ -21,4 +21,4 @@ module.exports = {
     migrationsDir: 'src/migrations',
     subscribersDir: 'src/migrations',
   },
-} as ConnectionOptions
+} as ConnectionOptions;

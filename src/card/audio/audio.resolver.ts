@@ -1,8 +1,8 @@
-import {Args, Mutation, Resolver} from '@nestjs/graphql'
-import {CustomResult} from '../../utils/CustomResult'
-import {Public} from '../../utils/public.decorator'
-import {AudioService} from './audio.service'
-import {AudioFileInfoInput} from './input/audioFileInfo.input'
+import {Args, Mutation, Resolver} from '@nestjs/graphql';
+import {CustomResult} from '../../utils/CustomResult';
+import {Public} from '../../utils/public.decorator';
+import {AudioService} from './audio.service';
+import {AudioFileInfoInput} from './input/audioFileInfo.input';
 @Resolver()
 export class AudioResolver {
   constructor(private readonly audioService: AudioService) {}
@@ -13,7 +13,7 @@ export class AudioResolver {
     @Args('audioFileInfo')
     {cardId, fileName, fileSize}: AudioFileInfoInput,
   ): Promise<CustomResult> {
-    return await this.audioService.signS3(cardId, fileName, fileSize)
+    return await this.audioService.signS3(cardId, fileName, fileSize);
   }
 
   @Public()
@@ -21,6 +21,6 @@ export class AudioResolver {
   async activateCardAudio(
     @Args('cardId') cardId: string,
   ): Promise<CustomResult> {
-    return await this.audioService.activateCardAudio(cardId)
+    return await this.audioService.activateCardAudio(cardId);
   }
 }
