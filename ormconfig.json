@@ -1,0 +1,14 @@
+{
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "postgres",
+    "password": "",
+    "database": "voicy",
+    "entities": ["src/**/*.entity.ts"],
+    "migrationsTableName": "migrations",
+    "migrations": ["migrations/*.ts"],
+    "cli": {
+        "migrationsDir": "migrations"
+    }
+}
