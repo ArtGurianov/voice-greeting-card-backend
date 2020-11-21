@@ -5,20 +5,20 @@ import appConfig from './appConfig';
 dotenv.config();
 const config = appConfig();
 
-module.exports = {
+const connOpts: ConnectionOptions = {
   type: 'postgres',
   url: config.pgUrl,
   synchronize: false,
   dropSchema: false,
   logging: config.nodeEnv === 'development' ? true : false,
-  keepConnectionAlive: true,
   //reading from
-  entities: ['src/**/*.entity.[tj]s'],
-  subscribers: ['src/subscribers/*.[tj]s'],
-  migrations: ['src/migrations/*.[tj]s'],
+  entities: ['!(dist)/**/*.entity.[tj]s'],
+  subscribers: ['!(dist)/subscribers/*.[tj]s'],
+  migrations: ['!(dist)/migrations/*.[tj]s'],
   cli: {
     //generating to:
     migrationsDir: 'src/migrations',
     subscribersDir: 'src/migrations',
   },
-} as ConnectionOptions;
+};
+export default connOpts;
