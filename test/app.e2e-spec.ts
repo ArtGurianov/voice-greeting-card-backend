@@ -2,8 +2,13 @@ import {HttpServer, INestApplication} from '@nestjs/common';
 import {Test, TestingModule} from '@nestjs/testing';
 import request from 'supertest';
 import {Connection, EntityManager, QueryRunner} from 'typeorm';
+
 import {AppModule} from '../src/app.module';
+import {TypeOrmConfigService} from '../src/config/typeormConfig.service';
+
 import {registerCustomerMutation, usersQuery} from './testQueries';
+import {TypeOrmE2EConfigService} from './typeormE2EConfigService';
+
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -12,9 +17,14 @@ describe('AppController (e2e)', () => {
   let queryRunner: QueryRunner;
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
+    const moduleFixture: TestingModule =
+        await Test
+          .createTestingModule({
+            imports: [AppModule],
+          })
+          .overrideProvider(TypeOrmConfigService)
+          .useClass(TypeOrmE2EConfigService)
+          .compile();
 
     app = moduleFixture.createNestApplication();
     httpServer = app.getHttpServer();
