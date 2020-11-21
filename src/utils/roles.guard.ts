@@ -4,10 +4,10 @@ import {
   Inject,
   Injectable,
   UnauthorizedException,
-} from '@nestjs/common'
-import {Reflector} from '@nestjs/core'
-import {GqlContextType, GqlExecutionContext} from '@nestjs/graphql'
-import {JwtService} from '../jwt/jwt.service'
+} from '@nestjs/common';
+import {Reflector} from '@nestjs/core';
+import {GqlContextType, GqlExecutionContext} from '@nestjs/graphql';
+import {JwtService} from '../jwt/jwt.service';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -18,14 +18,14 @@ export class RolesGuard implements CanActivate {
 
   getContextAndRequest(context: ExecutionContext) {
     switch (context.getType<GqlContextType>()) {
-      case 'graphql':
-        const ctx = GqlExecutionContext.create(context)
-        return {ctx: ctx.getContext(), req: ctx.getContext().req}
-      default:
-        return {
-          ctx: context.switchToHttp(),
-          req: context.switchToHttp().getRequest(),
-        }
+    case 'graphql':
+      const ctx = GqlExecutionContext.create(context);
+      return {ctx: ctx.getContext(), req: ctx.getContext().req};
+    default:
+      return {
+        ctx: context.switchToHttp(),
+        req: context.switchToHttp().getRequest(),
+      };
     }
   }
 
@@ -33,40 +33,40 @@ export class RolesGuard implements CanActivate {
     const isPublic = this.reflector.get<boolean>(
       'isPublic',
       context.getHandler(),
-    )
+    );
     if (isPublic) {
-      return true
+      return true;
     }
 
-    const {ctx, req} = this.getContextAndRequest(context)
-    const authHeader = req.headers['authorization']
+    const {ctx, req} = this.getContextAndRequest(context);
+    const authHeader = req.headers['authorization'];
 
     if (!authHeader) {
       throw new UnauthorizedException(
         'No auth header included in your request!',
-      )
+      );
     }
 
-    const token = authHeader.split(' ')[1]
-    const jwtPayload = this.jwtService.verifyAccessToken(token)
-    if (!jwtPayload) throw new UnauthorizedException('Invalid jwt!')
+    const token = authHeader.split(' ')[1];
+    const jwtPayload = this.jwtService.verifyAccessToken(token);
+    if (!jwtPayload) throw new UnauthorizedException('Invalid jwt!');
 
     const acceptedRoles = this.reflector.get<string[]>(
       'roles',
       context.getHandler(),
-    )
+    );
 
     if (
       !acceptedRoles ||
       !acceptedRoles.length ||
       acceptedRoles.includes(jwtPayload.role)
     ) {
-      ctx.jwtPayload = jwtPayload as any
-      req.jwtPayload = jwtPayload as any
-      return true
+      ctx.jwtPayload = jwtPayload as any;
+      req.jwtPayload = jwtPayload as any;
+      return true;
     }
     throw new UnauthorizedException(
       "You don't have permission to access this resource",
-    )
+    );
   }
 }

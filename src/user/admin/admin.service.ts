@@ -1,10 +1,10 @@
-import {Injectable, InternalServerErrorException} from '@nestjs/common'
-import {ConfigService} from '@nestjs/config'
-import {InjectRepository} from '@nestjs/typeorm'
-import {UserRoles} from '../../types/roles'
-import {defaultInsecureKey} from '../../utils/constants'
-import {UserRepository} from '../user.repository'
-import {AdminRepository} from './admin.repository'
+import {Injectable, InternalServerErrorException} from '@nestjs/common';
+import {ConfigService} from '@nestjs/config';
+import {InjectRepository} from '@nestjs/typeorm';
+import {UserRoles} from '../../types/roles';
+import {defaultInsecureKey} from '../../utils/constants';
+import {UserRepository} from '../user.repository';
+import {AdminRepository} from './admin.repository';
 
 @Injectable()
 export class AdminService {
@@ -20,12 +20,12 @@ export class AdminService {
     const superAdminEmail = this.configService.get<string>(
       'superAdminEmail',
       defaultInsecureKey,
-    )
+    );
     const superAdmin = await this.userRepo.findOne({
       email: superAdminEmail,
-    })
+    });
 
-    if (superAdmin) return superAdmin.id
+    if (superAdmin) return superAdmin.id;
 
     const newUser = await this.userRepo.create({
       email: superAdminEmail,
@@ -34,14 +34,14 @@ export class AdminService {
         'superAdminPassword',
         defaultInsecureKey,
       ),
-    })
+    });
     if (!newUser)
-      throw new InternalServerErrorException('could not create user record')
+      throw new InternalServerErrorException('could not create user record');
 
-    const newSuperAdmin = await this.adminRepo.save({user: newUser})
+    const newSuperAdmin = await this.adminRepo.save({user: newUser});
     if (!newSuperAdmin)
-      throw new InternalServerErrorException('could not create admin record')
+      throw new InternalServerErrorException('could not create admin record');
 
-    return newSuperAdmin.id
+    return newSuperAdmin.id;
   }
 }
