@@ -63,10 +63,10 @@ jobs:
       # - run: ssh -t dokku@164.90.224.15 docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
       # - run: ssh -t dokku@164.90.224.15 tags:deploy voicy latest
       #todo host address name (api or beta-api) from env vars.
-      - run: ssh-keyscan -H api.voicy.ru >> ~/.ssh/known_hosts
-      - run: ssh -t dokku@api.voicy.ru docker-direct pull artgurianov/voicy:latest
-      - run: ssh -t dokku@api.voicy.ru docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
-      - run: ssh -t dokku@api.voicy.ru tags:deploy voicy latest
+      - run: ssh-keyscan -H 128.199.58.165 >> ~/.ssh/known_hosts
+      - run: ssh -t dokku@128.199.58.165 docker-direct pull artgurianov/voicy:latest
+      - run: ssh -t dokku@128.199.58.165 docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
+      - run: ssh -t dokku@128.199.58.165 tags:deploy voicy latest
 
 workflows:
   version: 2
