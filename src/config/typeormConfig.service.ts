@@ -16,4 +16,4 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       keepConnectionAlive: true,
     };
   }
-};
+}
