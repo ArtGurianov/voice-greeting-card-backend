@@ -1,6 +1,6 @@
-import {Field, ID, ObjectType} from '@nestjs/graphql'
-import {BaseEntity, Column, Entity, PrimaryGeneratedColumn} from 'typeorm'
-import {UserRoles} from '../types/roles'
+import {Field, ID, ObjectType} from '@nestjs/graphql';
+import {BaseEntity, Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import {UserRoles} from '../types/roles';
 @ObjectType()
 @Entity('users')
 export class User extends BaseEntity {

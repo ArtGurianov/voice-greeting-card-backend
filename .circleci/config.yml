@@ -66,16 +66,36 @@ jobs:
 
 workflows:
   version: 2
-  test-build-deploy:
+  test:
     jobs:
       - test:
-          context: voicy
+          context: voicy-staging
+          filters:
+            branches:
+              ignore:
+                - master
+                - staging
+  build-and-deploy-staging:
+    jobs:
       - build:
-          context: voicy
-          requires:
-            - test
+          context: voicy-staging
+          filters:
+            branches:
+              only:
+                - staging
       - deploy:
-          context: voicy
+          context: voicy-staging
+          filters:
+            branches:
+              only:
+                - staging
           requires:
-            - test
             - build
+  deploy-production:
+    jobs:
+      - deploy:
+          context: voicy-production
+          filters:
+            branches:
+              only:
+                - master

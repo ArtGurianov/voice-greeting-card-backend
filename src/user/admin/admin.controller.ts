@@ -3,9 +3,9 @@ import {
   Inject,
   LoggerService,
   OnApplicationBootstrap,
-} from '@nestjs/common'
-import {WINSTON_MODULE_NEST_PROVIDER} from 'nest-winston'
-import {AdminService} from './admin.service'
+} from '@nestjs/common';
+import {WINSTON_MODULE_NEST_PROVIDER} from 'nest-winston';
+import {AdminService} from './admin.service';
 
 @Controller()
 export class AdminController implements OnApplicationBootstrap {
@@ -16,9 +16,9 @@ export class AdminController implements OnApplicationBootstrap {
   ) {}
 
   async onApplicationBootstrap() {
-    const id = await this.adminService.injectSuperAdmin()
+    const id = await this.adminService.injectSuperAdmin();
     if (id) {
-      this.logger.log(`Super admin id: ${id}`)
+      this.logger.log(`Super admin id: ${id}`);
     }
   }
 }
