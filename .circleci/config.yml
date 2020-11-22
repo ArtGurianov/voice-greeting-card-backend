@@ -56,13 +56,17 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             #todo: put this into env variable. One ssh for all circleCI access (prod, staging)?
-            - "c8:8d:0b:07:29:52:ca:fd:da:f6:33:89:ba:0f:38:da"
+            - "07:1f:97:55:69:0c:92:3e:f0:ca:fd:e4:94:bc:eb:78"
             #todo: switch ip address into host address.
-            #todo: host address name (api or beta-api) from env vars.
-      - run: ssh-keyscan -H 164.90.224.15 >> ~/.ssh/known_hosts
-      - run: ssh -t dokku@164.90.224.15 docker-direct pull artgurianov/voicy:latest
-      - run: ssh -t dokku@164.90.224.15 docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
-      - run: ssh -t dokku@164.90.224.15 tags:deploy voicy latest
+      # - run: ssh-keyscan -H 164.90.224.15 >> ~/.ssh/known_hosts
+      # - run: ssh -t dokku@164.90.224.15 docker-direct pull artgurianov/voicy:latest
+      # - run: ssh -t dokku@164.90.224.15 docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
+      # - run: ssh -t dokku@164.90.224.15 tags:deploy voicy latest
+      #todo host address name (api or beta-api) from env vars.
+      - run: ssh-keyscan -H api.voicy.ru >> ~/.ssh/known_hosts
+      - run: ssh -t dokku@api.voicy.ru docker-direct pull artgurianov/voicy:latest
+      - run: ssh -t dokku@api.voicy.ru docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
+      - run: ssh -t dokku@api.voicy.ru tags:deploy voicy latest
 
 workflows:
   version: 2
