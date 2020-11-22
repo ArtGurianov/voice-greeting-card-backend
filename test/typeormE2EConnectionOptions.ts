@@ -1,5 +1,5 @@
 import {
-    TypeOrmModuleOptions,
+  TypeOrmModuleOptions,
 } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 

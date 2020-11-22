@@ -2,9 +2,9 @@ import {Field, ID, ObjectType} from '@nestjs/graphql';
 import {v4} from 'uuid';
 
 export interface CustomResultInterface {
-  ok?: boolean
-  value?: string
-  errors?: CustomError[]
+  ok?: boolean;
+  value?: string;
+  errors?: CustomError[];
 }
 
 @ObjectType()
@@ -13,8 +13,8 @@ export class CustomError {
     location,
     errorMessages,
   }: {
-    location: string
-    errorMessages: string[]
+    location: string;
+    errorMessages: string[];
   }) {
     this.id = v4();
     this.location = location;
