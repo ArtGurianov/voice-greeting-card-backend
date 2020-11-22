@@ -8,8 +8,6 @@ import connectionOpts from './typeormConnectionOptions';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
-  public constructor() {}
-
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
       ...connectionOpts,
