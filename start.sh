@@ -1,3 +1,4 @@
+
 #!/bin/sh
 
 set -o errexit
@@ -12,14 +13,10 @@ apply_migrations() {
     npx ts-node ./node_modules/typeorm/cli.js migration:run -f src/config/typeormConnectionOptions.ts
 }
 
-if [[ "$NODE_ENV" == "development" ]]
+if [ "$NODE_ENV" = "development" ]
 then
     if apply_migrations; then echo "MIGRATIONS ARE APPLIED TO THE SCHEMA"; else exit 1; fi
     # if generate_migrations; then echo "MIGRATIONS ARE GENERATED"; else exit 1; fi
 fi
 
 yarn start
-
-#TEST CASE IS SPECIFIED IN .circleci config
-#OTHERWISE YOU MAY USE:
-#[ "$NODE_ENV" = "test" ] && yarn test:e2e-ci
