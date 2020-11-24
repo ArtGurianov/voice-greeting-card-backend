@@ -2,6 +2,26 @@
 
 Voicy api is a graphql app for digital gift cards system.
 
+## Local run
+
+App could be run without building:
+
+```bash
+$ npm run start:dev
+```
+
+Or first build the app:
+
+```bash
+$ npm run build
+```
+
+and then run passing the env file (look at `.env.example`):
+
+```bash
+$ npm run start -- dotenv_config_path=../.env # note the space between -- and the argument)
+```
+
 ## Installation and Setup
 
 DO steps.

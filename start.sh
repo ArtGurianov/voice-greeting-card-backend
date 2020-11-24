@@ -1,12 +1,25 @@
 #!/bin/sh
 
-yarn typeorm migration:generate -n init
-echo "MIGRATIONS ARE GENERATED"
-yarn typeorm migration:run
-echo "MIGRATIONS APPLIED TO SCHEMA"
+set -o errexit
 
-[ "$NODE_ENV" = "development" ] && yarn start:debug
-[ "$NODE_ENV" = "production" ] || [ "$NODE_ENV" = "staging" ] && yarn start:prod
+# Note: migrations are already should be created before running the container
+
+# generate_migrations() {
+#     npx ts-node ./node_modules/typeorm/cli.js migration:generate -n init -f src/config/typeormConnectionOptions.ts
+# }
+
+apply_migrations() {
+    npx ts-node ./node_modules/typeorm/cli.js migration:run -f src/config/typeormConnectionOptions.ts
+}
+
+if [[ "$NODE_ENV" == "development" ]]
+then
+    if apply_migrations; then echo "MIGRATIONS ARE APPLIED TO THE SCHEMA"; else exit 1; fi
+    # if generate_migrations; then echo "MIGRATIONS ARE GENERATED"; else exit 1; fi
+fi
+
+yarn start
+
 #TEST CASE IS SPECIFIED IN .circleci config
 #OTHERWISE YOU MAY USE:
 #[ "$NODE_ENV" = "test" ] && yarn test:e2e-ci
