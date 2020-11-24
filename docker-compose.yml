@@ -7,9 +7,6 @@ services:
     build:
       context: .
       target: development
-      #TODO
-      args:
-        - NODE_ENV=development
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -26,11 +23,13 @@ services:
       - postgres
   redis:
     container_name: redis
+    hostname: redis
     image: redis:5
     networks:
       - webnet
   postgres:
     container_name: postgres
+    hostname: postgres
     image: postgres:12
     networks:
       - webnet
