@@ -1,7 +1,7 @@
-import {Injectable} from '@nestjs/common'
-import {ConfigService} from '@nestjs/config'
-import {GqlModuleOptions, GqlOptionsFactory} from '@nestjs/graphql'
-import {defaultInsecureKey} from '../utils/constants'
+import {Injectable} from '@nestjs/common';
+import {ConfigService} from '@nestjs/config';
+import {GqlModuleOptions, GqlOptionsFactory} from '@nestjs/graphql';
+import {defaultInsecureKey} from '../utils/constants';
 
 @Injectable()
 export class GqlConfigService implements GqlOptionsFactory {
@@ -25,6 +25,6 @@ export class GqlConfigService implements GqlOptionsFactory {
         req,
         res,
       }),
-    }
+    };
   }
 }

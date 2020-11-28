@@ -4,21 +4,21 @@ import {
   Injectable,
   ValidationError,
   ValidationPipe,
-} from '@nestjs/common'
+} from '@nestjs/common';
 
 @Injectable()
 class MyValidationPipe extends ValidationPipe {
   async transform(value: any, metadata: ArgumentMetadata) {
     try {
-      await super.transform(value, metadata)
+      await super.transform(value, metadata);
     } catch (e) {
-      throw new BadRequestException({...e, origin: 'ValidationPipe'})
+      throw new BadRequestException({...e, origin: 'ValidationPipe'});
     }
-    return value
+    return value;
   }
 }
 
 export const validationPipe = new MyValidationPipe({
   exceptionFactory: (errors: ValidationError[]) =>
     new BadRequestException(errors),
-})
+});

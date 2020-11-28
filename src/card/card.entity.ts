@@ -1,12 +1,12 @@
-import {Field, ID, ObjectType} from '@nestjs/graphql'
+import {Field, ID, ObjectType} from '@nestjs/graphql';
 import {
   BaseEntity,
   Column,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
-} from 'typeorm'
-import {Question} from './question/question.entity'
+} from 'typeorm';
+import {Question} from './question/question.entity';
 
 @ObjectType()
 @Entity('cards')

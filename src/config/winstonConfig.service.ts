@@ -1,6 +1,6 @@
-import {Injectable} from '@nestjs/common'
-import {WinstonModuleOptions, WinstonModuleOptionsFactory} from 'nest-winston'
-import {format, transports} from 'winston'
+import {Injectable} from '@nestjs/common';
+import {WinstonModuleOptions, WinstonModuleOptionsFactory} from 'nest-winston';
+import {format, transports} from 'winston';
 
 @Injectable()
 export class WinstonConfigService implements WinstonModuleOptionsFactory {
@@ -28,17 +28,17 @@ export class WinstonConfigService implements WinstonModuleOptionsFactory {
           ),
         }),
       ],
-    }
+    };
   }
   public consoleLoggerFormat(info: any) {
-    const tzoffset: number = new Date().getTimezoneOffset() * 60000
+    const tzoffset: number = new Date().getTimezoneOffset() * 60000;
     const localISOTime: string = new Date(Date.now() - tzoffset)
       .toISOString()
-      .slice(0, -1)
-    const level = format.colorize(info.level.toUpperCase())
-    const context: string = info.context ? info.context : 'N/D'
-    const msg = format.colorize(info.message ? info.message : '')
+      .slice(0, -1);
+    const level = format.colorize(info.level.toUpperCase());
+    const context: string = info.context ? info.context : 'N/D';
+    const msg = format.colorize(info.message ? info.message : '');
 
-    return `${localISOTime} ${level.options} [${context}] ${msg.options}`
+    return `${localISOTime} ${level.options} [${context}] ${msg.options}`;
   }
 }

@@ -1,4 +1,4 @@
-import {Field, ID, ObjectType} from '@nestjs/graphql'
+import {Field, ID, ObjectType} from '@nestjs/graphql';
 import {
   BaseEntity,
   Column,
@@ -6,8 +6,8 @@ import {
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
-} from 'typeorm'
-import {User} from '../user.entity'
+} from 'typeorm';
+import {User} from '../user.entity';
 
 @ObjectType()
 @Entity('admins')

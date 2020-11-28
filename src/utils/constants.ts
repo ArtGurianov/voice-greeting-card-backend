@@ -1,1 +1,1 @@
-export const defaultInsecureKey = '!insecured!'
+export const defaultInsecureKey = '!insecured!';

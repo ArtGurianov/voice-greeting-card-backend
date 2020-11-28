@@ -22,15 +22,12 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run: yarn typeorm migration:generate -n init
-      - run: yarn typeorm migration:run
+      - run: yarn typeorm-test migration:run
       #!add rollback!
       - run: yarn test:e2e-ci
-
   build:
     docker:
       - image: alpine:3.7
-
     steps:
       - checkout
       - setup_remote_docker
@@ -46,7 +43,6 @@ jobs:
       - run: docker build -t artgurianov/voicy:latest --no-cache .
       - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
       - run: docker push artgurianov/voicy:latest
-
   deploy:
     docker:
       - image: alpine:3.7
@@ -55,12 +51,18 @@ jobs:
       - run: apk add --no-cache openssh
       - add_ssh_keys:
           fingerprints:
-            - $SSH_FINGERPRINT
-      - run: mkdir -p ~/.ssh
-      - run: ssh-keyscan -H $BACKEND_HOST_URL >> ~/.ssh/known_hosts
-      - run: ssh -t dokku@$BACKEND_HOST_URL docker-direct pull artgurianov/voicy:latest
-      - run: ssh -t dokku@$BACKEND_HOST_URL docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
-      - run: ssh -t dokku@$BACKEND_HOST_URL tags:deploy voicy latest
+            #todo: put this into env variable. One ssh for all circleCI access (prod, staging)?
+            - "07:1f:97:55:69:0c:92:3e:f0:ca:fd:e4:94:bc:eb:78"
+            #todo: switch ip address into host address.
+      # - run: ssh-keyscan -H 164.90.224.15 >> ~/.ssh/known_hosts
+      # - run: ssh -t dokku@164.90.224.15 docker-direct pull artgurianov/voicy:latest
+      # - run: ssh -t dokku@164.90.224.15 docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
+      # - run: ssh -t dokku@164.90.224.15 tags:deploy voicy latest
+      #todo host address name (api or beta-api) from env vars.
+      - run: ssh-keyscan -H 128.199.58.165 >> ~/.ssh/known_hosts
+      - run: ssh -t dokku@128.199.58.165 docker-direct pull artgurianov/voicy:latest
+      - run: ssh -t dokku@128.199.58.165 docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
+      - run: ssh -t dokku@128.199.58.165 tags:deploy voicy latest
 
 workflows:
   version: 2

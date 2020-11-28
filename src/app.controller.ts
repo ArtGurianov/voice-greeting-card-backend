@@ -1,7 +1,10 @@
-import {Controller, Get} from '@nestjs/common'
-import {AppService} from './app.service'
-import {Public} from './utils/public.decorator'
+import {Controller, Get} from '@nestjs/common';
+import {ApiTags} from '@nestjs/swagger';
 
+import {AppService} from './app.service';
+import {Public} from './utils/public.decorator';
+
+@ApiTags('app')
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -9,6 +12,6 @@ export class AppController {
   @Public()
   @Get()
   getHello(): string {
-    return this.appService.getHello()
+    return this.appService.getHello();
   }
 }
