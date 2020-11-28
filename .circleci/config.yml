@@ -25,44 +25,44 @@ jobs:
       - run: yarn typeorm-test migration:run
       #!add rollback!
       - run: yarn test:e2e-ci
-  # build:
-  #   docker:
-  #     - image: alpine:3.7
-  #   steps:
-  #     - checkout
-  #     - setup_remote_docker
-  #     - run: apk add --no-cache curl
-  #     - run:
-  #         name: Install Docker client
-  #         command: |
-  #           set -x
-  #           VER="18.06.3-ce"
-  #           curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
-  #           tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-  #           mv /tmp/docker/* /usr/bin/
-  #     - run: docker build -t artgurianov/voicy:latest --no-cache .
-  #     - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-  #     - run: docker push artgurianov/voicy:latest
-  # deploy:
-  #   docker:
-  #     - image: alpine:3.7
-  #   steps:
-  #     - checkout
-  #     - run: apk add --no-cache openssh
-  #     - add_ssh_keys:
-  #         fingerprints:
-  #           #todo: put this into env variable. One ssh for all circleCI access (prod, staging)?
-  #           - "07:1f:97:55:69:0c:92:3e:f0:ca:fd:e4:94:bc:eb:78"
-  #           #todo: switch ip address into host address.
-  #     # - run: ssh-keyscan -H 164.90.224.15 >> ~/.ssh/known_hosts
-  #     # - run: ssh -t dokku@164.90.224.15 docker-direct pull artgurianov/voicy:latest
-  #     # - run: ssh -t dokku@164.90.224.15 docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
-  #     # - run: ssh -t dokku@164.90.224.15 tags:deploy voicy latest
-  #     #todo host address name (api or beta-api) from env vars.
-  #     - run: ssh-keyscan -H 128.199.58.165 >> ~/.ssh/known_hosts
-  #     - run: ssh -t dokku@128.199.58.165 docker-direct pull artgurianov/voicy:latest
-  #     - run: ssh -t dokku@128.199.58.165 docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
-  #     - run: ssh -t dokku@128.199.58.165 tags:deploy voicy latest
+  build:
+    docker:
+      - image: alpine:3.7
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: apk add --no-cache curl
+      - run:
+          name: Install Docker client
+          command: |
+            set -x
+            VER="18.06.3-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin/
+      - run: docker build -t artgurianov/voicy:latest --no-cache .
+      - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+      - run: docker push artgurianov/voicy:latest
+  deploy:
+    docker:
+      - image: alpine:3.7
+    steps:
+      - checkout
+      - run: apk add --no-cache openssh
+      - add_ssh_keys:
+          fingerprints:
+            #todo: put this into env variable. One ssh for all circleCI access (prod, staging)?
+            - "07:1f:97:55:69:0c:92:3e:f0:ca:fd:e4:94:bc:eb:78"
+            #todo: switch ip address into host address.
+      # - run: ssh-keyscan -H 164.90.224.15 >> ~/.ssh/known_hosts
+      # - run: ssh -t dokku@164.90.224.15 docker-direct pull artgurianov/voicy:latest
+      # - run: ssh -t dokku@164.90.224.15 docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
+      # - run: ssh -t dokku@164.90.224.15 tags:deploy voicy latest
+      #todo host address name (api or beta-api) from env vars.
+      - run: ssh-keyscan -H 128.199.58.165 >> ~/.ssh/known_hosts
+      - run: ssh -t dokku@128.199.58.165 docker-direct pull artgurianov/voicy:latest
+      - run: ssh -t dokku@128.199.58.165 docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
+      - run: ssh -t dokku@128.199.58.165 tags:deploy voicy latest
 
 workflows:
   version: 2
@@ -75,27 +75,27 @@ workflows:
               ignore:
                 - master
                 - staging
-  # build-and-deploy-staging:
-  #   jobs:
-  #     - build:
-  #         context: voicy-staging
-  #         filters:
-  #           branches:
-  #             only:
-  #               - staging
-  #     - deploy:
-  #         context: voicy-staging
-  #         filters:
-  #           branches:
-  #             only:
-  #               - staging
-  #         requires:
-  #           - build
-  # deploy-production:
-  #   jobs:
-  #     - deploy:
-  #         context: voicy-production
-  #         filters:
-  #           branches:
-  #             only:
-  #               - master
+  build-and-deploy-staging:
+    jobs:
+      - build:
+          context: voicy-staging
+          filters:
+            branches:
+              only:
+                - staging
+      - deploy:
+          context: voicy-staging
+          filters:
+            branches:
+              only:
+                - staging
+          requires:
+            - build
+  deploy-production:
+    jobs:
+      - deploy:
+          context: voicy-production
+          filters:
+            branches:
+              only:
+                - master
