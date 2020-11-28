@@ -19,4 +19,5 @@ then
     # if generate_migrations; then echo "MIGRATIONS ARE GENERATED"; else exit 1; fi
 fi
 
-yarn start
+yarn run start:watch
+

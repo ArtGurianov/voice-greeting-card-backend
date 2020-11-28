@@ -7,20 +7,27 @@ Voicy api is a graphql app for digital gift cards system.
 App could be run without building:
 
 ```bash
-$ npm run start:dev
+$ yarn run start
 ```
 
 Or first build the app:
 
 ```bash
-$ npm run build
+$ yarn run build
 ```
 
 and then run passing the env file (look at `.env.example`):
 
 ```bash
-$ npm run start -- dotenv_config_path=../.env # note the space between -- and the argument)
+$ yarn run start:prod -- dotenv_config_path=../.env # note the space between -- and the argument
 ```
+
+
+## API Documentation
+
+On non-production environments, API documentation is accessible at the `/swagger` endpoint.
+
+E.g. `http://localhost:8000/swagger`
 
 ## Installation and Setup
 
