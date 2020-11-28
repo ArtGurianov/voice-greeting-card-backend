@@ -1,7 +1,7 @@
-import {Injectable} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   TypeOrmModuleOptions,
-  TypeOrmOptionsFactory,
+  TypeOrmOptionsFactory
 } from '@nestjs/typeorm';
 import connectionOpts from './typeormConnectionOptions';
 

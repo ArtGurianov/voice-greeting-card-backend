@@ -1,5 +1,5 @@
 import * as dotenv from 'dotenv';
-import {ConnectionOptions} from 'typeorm';
+import { ConnectionOptions } from 'typeorm';
 import appConfig from './appConfig';
 
 dotenv.config();
