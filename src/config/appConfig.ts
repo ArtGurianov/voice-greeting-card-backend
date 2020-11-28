@@ -14,4 +14,5 @@ export default () => ({
   awsRegion: process.env.AWS_REGION,
   redisUrl: process.env.REDIS_URL,
   pgUrl: process.env.DATABASE_URL,
+  testPgUrl: process.env.TEST_DATABASE_URL,
 });
