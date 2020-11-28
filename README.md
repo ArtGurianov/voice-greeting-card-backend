@@ -22,7 +22,12 @@ and then run passing the env file (look at `.env.example`):
 $ yarn run start:prod -- dotenv_config_path=../.env # note the space between -- and the argument
 ```
 
-More scripts could be found inside `package.json`
+
+## API Documentation
+
+On non-production environments, API documentation is accessible at the `/swagger` endpoint.
+
+E.g. `http://localhost:8000/swagger`
 
 ## Installation and Setup
 

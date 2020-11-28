@@ -11,8 +11,7 @@ const config = appConfig();
 
 const connOpts: TypeOrmModuleOptions = {
   type: 'postgres',
-  // url: config.pgUrl,
-  url: 'postgres://postgres:@127.0.0.1:5432/e2e_tests',
+  url: config.testPgUrl,
   synchronize: false,
   dropSchema: false,
   logging: config.nodeEnv === 'development' ? true : false,

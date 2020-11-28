@@ -4,9 +4,13 @@ import {
   LoggerService,
   OnApplicationBootstrap,
 } from '@nestjs/common';
+import {ApiTags} from '@nestjs/swagger';
 import {WINSTON_MODULE_NEST_PROVIDER} from 'nest-winston';
+
 import {AdminService} from './admin.service';
 
+
+@ApiTags('user')
 @Controller()
 export class AdminController implements OnApplicationBootstrap {
   constructor(
