@@ -20,7 +20,8 @@
     "test:debug": "cross-env NODE_ENV=test node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "cross-env NODE_ENV=test jest --config ./test/jest-e2e.json",
     "test:e2e-ci": "cross-env NODE_ENV=test jest --config ./test/jest-e2e.json --ci --runInBand --detectOpenHandles --forceExit",
-    "typeorm": "ts-node --transpile-only -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/config/typeormConnectionOptions.ts"
+    "typeorm": "ts-node --transpile-only -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/config/typeormConnectionOptions.ts",
+    "typeorm-test": "ts-node --transpile-only -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config test/typeormE2EConnectionOptions.ts"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
