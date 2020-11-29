@@ -24,7 +24,6 @@ jobs:
 
       - run: yarn typeorm-test schema:drop
       - run: yarn typeorm-test migration:run
-      #!add rollback!
       - run: yarn test:e2e-ci
   build:
     docker:
