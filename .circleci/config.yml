@@ -52,7 +52,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             #todo: put this into env variable. One ssh for all circleCI access (prod, staging)?
-            - "07:1f:97:55:69:0c:92:3e:f0:ca:fd:e4:94:bc:eb:78"
+            - $SSH_FINGERPRINT
             #todo: switch ip address into host address.
       # - run: ssh-keyscan -H 164.90.224.15 >> ~/.ssh/known_hosts
       # - run: ssh -t dokku@164.90.224.15 docker-direct pull artgurianov/voicy:latest
