@@ -52,6 +52,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - $SSH_FINGERPRINT
+      - run: mkdir ~/.ssh
       - run: ssh-keyscan -H $BACKEND_HOST_URL >> ~/.ssh/known_hosts #ONE TIME OPERATION. BUT NEEDS TO BE DONE TO BE ABLE TO REACH HOSTNAME
       - run: ssh -t dokku@$BACKEND_HOST_URL docker-direct pull artgurianov/voicy:latest
       - run: ssh -t dokku@$BACKEND_HOST_URL docker-direct tag artgurianov/voicy:latest dokku/voicy:latest
