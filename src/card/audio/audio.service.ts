@@ -3,17 +3,17 @@ import {
   InternalServerErrorException,
   NotAcceptableException,
   NotFoundException,
-  PayloadTooLargeException,
+  PayloadTooLargeException
 } from '@nestjs/common';
-import {ConfigService} from '@nestjs/config';
-import {InjectRepository} from '@nestjs/typeorm';
-import {S3} from 'aws-sdk';
+import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { S3 } from 'aws-sdk';
 import fetch from 'isomorphic-unfetch';
-import {RedisServiceAdapter} from '../../redis/redisAdapter.service';
-import {REDIS_PREFIXES} from '../../types/redisPrefixes.enum';
-import {defaultInsecureKey} from '../../utils/constants';
-import {CustomError, CustomResult} from '../../utils/CustomResult';
-import {CardRepository} from '../card.repository';
+import { RedisServiceAdapter } from '../../redis/redisAdapter.service';
+import { REDIS_PREFIXES } from '../../types/redisPrefixes.enum';
+import { defaultInsecureKey } from '../../utils/constants';
+import { CustomError, CustomResult } from '../../utils/CustomResult';
+import { CardRepository } from '../card.repository';
 
 @Injectable()
 export class AudioService {
@@ -55,15 +55,10 @@ export class AudioService {
     if (alreadySigned) return new CustomResult({ok: true, value: alreadySigned});
 
     const card = await this.cardRepo.findOne({id: cardId});
-    if (!card)
-      return new CustomResult({
-        errors: [
-          new CustomError({
-            location: 'Card',
-            errorMessages: ['this card is already activated'],
-          }),
-        ],
-      });
+    if (!card) {
+      throw new NotFoundException('card not found');
+    }
+    
     const s3 = new S3({
       signatureVersion: 'v4',
       region: 'eu-central-1',
