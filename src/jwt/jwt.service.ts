@@ -1,9 +1,9 @@
-import {Injectable} from '@nestjs/common';
-import {ConfigService} from '@nestjs/config';
-import {Response} from 'express';
-import {sign, verify} from 'jsonwebtoken';
-import {User} from '../user/user.entity';
-import {defaultInsecureKey} from '../utils/constants';
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Response } from 'express';
+import { sign, verify } from 'jsonwebtoken';
+import { User } from '../user/user.entity';
+import { defaultInsecureKey } from '../utils/constants';
 
 @Injectable()
 export class JwtService {
@@ -29,7 +29,7 @@ export class JwtService {
     res.cookie('jid', token, {
       httpOnly: true,
       maxAge: 365 * 24 * 60 * 60 * 1000,
-      path: '/user/refresh_token',
+      path: '/user/refresh',
     });
   }
 
