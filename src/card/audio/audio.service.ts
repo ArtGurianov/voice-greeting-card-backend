@@ -22,7 +22,22 @@ export class AudioService {
     private readonly configService: ConfigService,
     @InjectRepository(CardRepository)
     private readonly cardRepo: CardRepository,
-  ) {}
+  ) {
+    this.audioStorage = new S3({
+      signatureVersion: 'v4',
+      region: 'eu-central-1', //region should come from env
+      accessKeyId: configService.get<string>(
+        'awsAccessKeyId',
+        defaultInsecureKey,
+      ),
+      secretAccessKey: configService.get<string>(
+        'awsSecretAccessKey',
+        defaultInsecureKey,
+      ),
+    });
+  }
+
+  private readonly audioStorage: S3
 
   async transcribeAudioFile(audiofile: any): Promise<string> {
     const result = await fetch('https://api.wit.ai/speech', {
@@ -58,21 +73,8 @@ export class AudioService {
     if (!card) {
       throw new NotFoundException('card not found');
     }
-    
-    const s3 = new S3({
-      signatureVersion: 'v4',
-      region: 'eu-central-1',
-      accessKeyId: this.configService.get<string>(
-        'awsAccessKeyId',
-        defaultInsecureKey,
-      ),
-      secretAccessKey: this.configService.get<string>(
-        'awsSecretAccessKey',
-        defaultInsecureKey,
-      ),
-    });
 
-    const url = await s3.getSignedUrl('putObject', {
+    const url = await this.audioStorage.getSignedUrl('putObject', {
       ACL: 'public-read',
       Bucket: this.configService.get<string>(
         's3BucketName',
@@ -94,6 +96,28 @@ export class AudioService {
     return new CustomResult({ok: true, value: url});
   }
 
+  async uploadingCompleted(cardId: string) {
+    const isPending = await this.redisService.get(
+      `${REDIS_PREFIXES.UPLOAD_S3}${cardId}`,
+    );
+
+    if (isPending) {
+      await this.redisService.del(`${REDIS_PREFIXES.UPLOAD_S3}${cardId}`);
+      return new CustomResult({ok: true})
+    }
+
+    await this.audioStorage.deleteObject(
+      {
+        Bucket: this.configService.get<string>(
+          's3BucketName',
+          defaultInsecureKey,
+          ),
+        Key: cardId
+      }).promise()
+      
+    return new CustomResult({ok: false, errors: [new CustomError({location: 'uploading', errorMessages: ['uploading incompleted.']})]})
+  }
+
   async activateCardAudio(cardId: string): Promise<CustomResult> {
     const card = await this.cardRepo.findOne({id: cardId});
     if (!card) throw new NotFoundException('card not found');
@@ -107,12 +131,6 @@ export class AudioService {
         ],
       });
 
-    const isPending = await this.redisService.get(
-      `${REDIS_PREFIXES.UPLOAD_S3}${cardId}`,
-    );
-    if (!isPending) throw new NotFoundException();
-    await this.redisService.del(`${REDIS_PREFIXES.UPLOAD_S3}${cardId}`);
-
     const activated = await this.cardRepo.save({
       ...card,
       isActivatedAudio: true,
@@ -121,3 +139,4 @@ export class AudioService {
     return new CustomResult({ok: true});
   }
 }
+
