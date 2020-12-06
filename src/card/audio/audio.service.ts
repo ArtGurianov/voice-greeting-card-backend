@@ -22,7 +22,22 @@ export class AudioService {
     private readonly configService: ConfigService,
     @InjectRepository(CardRepository)
     private readonly cardRepo: CardRepository,
-  ) {}
+  ) {
+    this.audioStorage = new S3({
+      signatureVersion: 'v4',
+      region: 'eu-central-1', //region should come from env
+      accessKeyId: configService.get<string>(
+        'awsAccessKeyId',
+        defaultInsecureKey,
+      ),
+      secretAccessKey: configService.get<string>(
+        'awsSecretAccessKey',
+        defaultInsecureKey,
+      ),
+    });
+  }
+
+  private readonly audioStorage: S3
 
   async transcribeAudioFile(audiofile: any): Promise<string> {
     const result = await fetch('https://api.wit.ai/speech', {
@@ -59,20 +74,8 @@ export class AudioService {
       throw new NotFoundException('card not found');
     }
     
-    const s3 = new S3({
-      signatureVersion: 'v4',
-      region: 'eu-central-1',
-      accessKeyId: this.configService.get<string>(
-        'awsAccessKeyId',
-        defaultInsecureKey,
-      ),
-      secretAccessKey: this.configService.get<string>(
-        'awsSecretAccessKey',
-        defaultInsecureKey,
-      ),
-    });
 
-    const url = await s3.getSignedUrl('putObject', {
+    const url = await this.audioStorage.getSignedUrl('putObject', {
       ACL: 'public-read',
       Bucket: this.configService.get<string>(
         's3BucketName',
