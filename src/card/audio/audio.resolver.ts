@@ -11,9 +11,9 @@ export class AudioResolver {
   @Mutation(() => CustomResult)
   async signS3(
     @Args('audioFileInfo')
-    {cardId, fileName, fileSize}: AudioFileInfoInput,
+    {cardId, fileName, fileSizeBytes}: AudioFileInfoInput,
   ): Promise<CustomResult> {
-    return await this.audioService.signS3(cardId, fileName, fileSize);
+    return await this.audioService.signS3(cardId, fileName, fileSizeBytes);
   }
 
   @Public()

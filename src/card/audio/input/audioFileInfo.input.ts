@@ -1,6 +1,8 @@
 import {Field, InputType} from '@nestjs/graphql';
 import {IsNumber, IsString, IsUUID, Max} from 'class-validator';
 
+import { MiB } from '../../../utils/units';
+
 @InputType()
 export class AudioFileInfoInput {
   @Field()
@@ -13,6 +15,6 @@ export class AudioFileInfoInput {
 
   @Field()
   @IsNumber()
-  @Max(1000000)
-  fileSize: number
+  @Max(100 * MiB)
+  fileSizeBytes: number
 }
