@@ -3,7 +3,7 @@ import {
   InternalServerErrorException,
   NotAcceptableException,
   NotFoundException,
-  PayloadTooLargeException
+  PayloadTooLargeException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -73,7 +73,7 @@ export class AudioService {
     if (!card) {
       throw new NotFoundException('card not found');
     }
-    
+
 
     const url = await this.audioStorage.getSignedUrl('putObject', {
       ACL: 'public-read',

@@ -31,16 +31,16 @@ async function bootstrap() {
   app.enableShutdownHooks();
 
   if (configService.get<string>('nodeEnv', 'development') === 'development') {
-      const options = new DocumentBuilder()
-        .setTitle('Voicy API')
-        .setDescription('')
-        .setVersion('0.1')
-        // TODO(luc1ph3r): what does it do?
-        // .addTag('cats')
-        .build();
-      const document = SwaggerModule.createDocument(app, options);
+    const options = new DocumentBuilder()
+      .setTitle('Voicy API')
+      .setDescription('')
+      .setVersion('0.1')
+      // TODO(luc1ph3r): what does it do?
+      // .addTag('cats')
+      .build();
+    const document = SwaggerModule.createDocument(app, options);
 
-      SwaggerModule.setup('swagger', app, document);
+    SwaggerModule.setup('swagger', app, document);
   }
 
   await app.listen(

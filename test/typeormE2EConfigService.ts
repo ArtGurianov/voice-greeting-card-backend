@@ -1,6 +1,6 @@
 import {
-    TypeOrmOptionsFactory,
-    TypeOrmModuleOptions,
+  TypeOrmOptionsFactory,
+  TypeOrmModuleOptions,
 } from '@nestjs/typeorm';
 
 import connOpts from './typeormE2EConnectionOptions';
