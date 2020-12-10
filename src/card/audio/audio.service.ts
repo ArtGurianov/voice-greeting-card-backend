@@ -11,6 +11,7 @@ import { S3 } from 'aws-sdk';
 import fetch from 'isomorphic-unfetch';
 import { RedisServiceAdapter } from '../../redis/redisAdapter.service';
 import { REDIS_PREFIXES } from '../../types/redisPrefixes.enum';
+import { MiB } from '../../utils/units';
 import { defaultInsecureKey } from '../../utils/constants';
 import { CustomError, CustomResult } from '../../utils/CustomResult';
 import { CardRepository } from '../card.repository';
@@ -58,9 +59,9 @@ export class AudioService {
   async signS3(
     cardId: string,
     fileName: string,
-    fileSize: number,
+    fileSizeBytes: number,
   ): Promise<CustomResult> {
-    if (fileSize > 1000000) throw new PayloadTooLargeException();
+    if (fileSizeBytes > 100 * MiB) throw new PayloadTooLargeException();
     if (fileName.split('.').slice(-1)[0] !== 'wav')
       throw new NotAcceptableException();
 
@@ -82,7 +83,7 @@ export class AudioService {
         defaultInsecureKey,
       ),
       Key: cardId,
-      Expires: 60,
+      Expires: 60, // seconds
       ContentType: 'audio/wave',
     });
 

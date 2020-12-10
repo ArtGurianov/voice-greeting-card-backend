@@ -73,7 +73,7 @@ export class UserService {
       throw new UnauthorizedException();
     }
     const refreshToken = this.jwtService.createRefreshToken(user);
-    this.jwtService.sendRefreshToken(res, refreshToken);
+    this.jwtService.setRefreshToken(res, refreshToken);
     const accessToken = this.jwtService.createAccessToken(user);
     return new CustomResult({ok: true, value: accessToken});
   }
@@ -144,13 +144,13 @@ export class UserService {
         'Ohhh.. Could not process operation.',
       );
     }
-    this.jwtService.sendRefreshToken(res, refreshToken);
+    this.jwtService.setRefreshToken(res, refreshToken);
 
     return accessToken;
   }
 
   async logout(res: Response): Promise<boolean> {
-    this.jwtService.sendRefreshToken(res, '');
+    this.jwtService.setRefreshToken(res, '');
     return true;
   }
 }
