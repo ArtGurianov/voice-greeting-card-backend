@@ -9,6 +9,8 @@ import {Reflector} from '@nestjs/core';
 import {GqlContextType, GqlExecutionContext} from '@nestjs/graphql';
 import {JwtService} from '../jwt/jwt.service';
 
+const BEARER_PREFIX = 'Bearer ';
+
 @Injectable()
 export class RolesGuard implements CanActivate {
   public constructor(
@@ -47,7 +49,13 @@ export class RolesGuard implements CanActivate {
       );
     }
 
-    const token = authHeader.split(' ')[1];
+    if (!authHeader.startsWith(BEARER_PREFIX)) {
+      throw new UnauthorizedException(
+        'Incorrect auth header format',
+      );
+    }
+
+    const token = authHeader.slice(BEARER_PREFIX.length);
     const jwtPayload = this.jwtService.verifyAccessToken(token);
     if (!jwtPayload) throw new UnauthorizedException('Invalid jwt!');
 
