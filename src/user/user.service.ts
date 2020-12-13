@@ -80,6 +80,7 @@ export class UserService {
 
   async me(userId: string): Promise<typeof MeResult> {
     const user = await this.userRepo.findOne(userId);
+    // TODO: log the user out
     if (!user) throw new NotFoundException();
 
     const roleEntity = await this.connection

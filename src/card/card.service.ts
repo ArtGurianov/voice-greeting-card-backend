@@ -23,7 +23,7 @@ export class CardService {
       where: {id: cardId},
       relations: ['questions'],
     });
-    if (!card) throw new NotFoundException();
+    if (!card) throw new NotFoundException('no card with the specified id');
     return card;
   }
 }

@@ -20,7 +20,10 @@ export class QuestionService {
 
   async getQuestions(cardId: string): Promise<Question[]> {
     const questions = await this.questionRepo.find({where: {cardId}});
-    if (!questions) throw new NotFoundException();
+    if (!questions || !questions.length) {
+      throw new NotFoundException('no questions for the specified card id');
+    }
+
     return questions;
   }
 
@@ -29,7 +32,10 @@ export class QuestionService {
     questions: {options: string[]; answer: string}[],
   ): Promise<CustomResult> {
     const card = await this.cardRepo.findOne({id: cardId});
-    if (!card) throw new NotFoundException();
+    if (!card) {
+      throw new NotFoundException('no card with the specified id');
+    }
+
     if (card.isActivatedQuestions)
       return new CustomResult({
         errors: [
@@ -44,14 +50,18 @@ export class QuestionService {
       questions.map(q => ({...q, cardId})),
     );
 
-    if (!savedQuestions) throw new InternalServerErrorException();
+    if (!savedQuestions) {
+      throw new InternalServerErrorException('failed to save questions');
+    }
 
     const activatedCard = await this.cardRepo.save({
       ...card,
       isActivatedQuestions: true,
     });
 
-    if (!activatedCard) throw new InternalServerErrorException();
+    if (!activatedCard) {
+      throw new InternalServerErrorException('failed to save questions');
+    }
 
     return new CustomResult({ok: true});
   }
