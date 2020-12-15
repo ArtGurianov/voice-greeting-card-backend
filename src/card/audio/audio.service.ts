@@ -61,9 +61,13 @@ export class AudioService {
     fileName: string,
     fileSizeBytes: number,
   ): Promise<CustomResult> {
-    if (fileSizeBytes > 100 * MiB) throw new PayloadTooLargeException();
-    if (fileName.split('.').slice(-1)[0] !== 'wav')
-      throw new NotAcceptableException();
+    if (fileSizeBytes > 100 * MiB) {
+      throw new PayloadTooLargeException('file is too big');
+    }
+
+    if (fileName.split('.').slice(-1)[0] !== 'wav') {
+      throw new NotAcceptableException('unsupported file format');
+    }
 
     const alreadySigned = await this.redisService.get(
       `${REDIS_PREFIXES.UPLOAD_S3}${cardId}`,
@@ -87,7 +91,10 @@ export class AudioService {
       ContentType: 'audio/wave',
     });
 
-    if (!url) throw new InternalServerErrorException();
+    if (!url) {
+      // TODO: log this
+      throw new InternalServerErrorException();
+    }
 
     await this.redisService.set(
       `${REDIS_PREFIXES.UPLOAD_S3}${cardId}`,
@@ -121,7 +128,11 @@ export class AudioService {
       ...card,
       isActivatedAudio: true,
     });
-    if (!activated) throw new InternalServerErrorException();
+
+    if (!activated) {
+      throw new InternalServerErrorException("failed to save card's audio");
+    }
+
     return new CustomResult({ok: true});
   }
 }

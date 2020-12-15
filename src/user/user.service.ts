@@ -66,11 +66,11 @@ export class UserService {
   ): Promise<CustomResult> {
     const user = await this.userRepo.findOne({where: {email}});
     if (!user) {
-      throw new NotFoundException();
+      throw new UnauthorizedException("email or password doesn't match");
     }
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("email or password doesn't match");
     }
     const refreshToken = this.jwtService.createRefreshToken(user);
     this.jwtService.setRefreshToken(res, refreshToken);
@@ -80,6 +80,7 @@ export class UserService {
 
   async me(userId: string): Promise<typeof MeResult> {
     const user = await this.userRepo.findOne(userId);
+    // TODO: log the user out
     if (!user) throw new NotFoundException();
 
     const roleEntity = await this.connection
