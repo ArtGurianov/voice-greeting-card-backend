@@ -10,12 +10,14 @@ import {RegisterInput} from './input/user.registerInput';
 import {MeResult} from './user.customResults';
 import {User} from './user.entity';
 import {UserService} from './user.service';
+import {Roles} from '../utils/roles.decorator';
+import {UserRoles} from '../types/roles';
 
 @Resolver()
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Public()
+  @Roles(UserRoles.SUPER_ADMIN, UserRoles.ADMIN)
   @Query(() => [User])
   async users(): Promise<User[]> {
     return await this.userService.users();
@@ -50,6 +52,7 @@ export class UserResolver {
     return await this.userService.me(jwtPayload!.userId);
   }
 
+  @Roles(UserRoles.SUPER_ADMIN, UserRoles.ADMIN)
   @Mutation(() => Boolean)
   async revokeRefreshToken(@Args('userId') userId: string): Promise<boolean> {
     return await this.userService.revokeRefreshToken(userId);

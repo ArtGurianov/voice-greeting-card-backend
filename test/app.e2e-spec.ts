@@ -58,7 +58,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('/graphql (POST) query:users', async () => {
-    return request(httpServer)
+    await request(httpServer)
       .post('/graphql')
       .send({
         operationName: null,
@@ -67,9 +67,24 @@ describe('AppController (e2e)', () => {
       })
       .expect(200)
       .expect(({body}) => {
+        expect(body.hasOwnProperty('errors')).toBeTruthy();
+        expect(body.errors[0].message).toMatch(new RegExp('No auth header.*'));
+      });
+
+    await request(httpServer)
+      .post('/graphql')
+      .set('Authorization', 'FakeAuth ADMIN')
+      .send({
+        operationName: null,
+        variables: {},
+        query: usersQuery,
+      })
+      .expect(200)
+      .expect(({body}) => {
         const users = body.data.users;
-        expect(users.length).not.toBeNaN;
-        expect(users.length).not.toBeNull;
+
+        expect(users.length).not.toBeNaN();
+        expect(users.length).not.toBeNull();
         expect(users.length).not.toEqual(0);
         expect(users[0]).toHaveProperty('role');
         expect(users[0].role).toEqual('SUPER_ADMIN');
@@ -86,7 +101,7 @@ describe('AppController (e2e)', () => {
       })
       .expect(200)
       .expect(({body}) => {
-        expect(body.data.register.ok).toBeTruthy;
+        expect(body.data.register.ok).toBeTruthy();
       });
   });
 });
