@@ -64,12 +64,14 @@ type Customer {
 
 type Distributor {
   id: ID!
+  isActive: Boolean!
   user: User!
   userId: String!
 }
 
 type Manufacturer {
   id: ID!
+  isActive: Boolean!
   user: User!
   userId: String!
 }

@@ -1,14 +1,17 @@
-import {Injectable, InternalServerErrorException} from '@nestjs/common';
-import {ConfigService} from '@nestjs/config';
-import {InjectRepository} from '@nestjs/typeorm';
-import {UserRoles} from '../../types/roles';
-import {defaultInsecureKey} from '../../utils/constants';
-import {UserRepository} from '../user.repository';
-import {AdminRepository} from './admin.repository';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
+import { Connection } from 'typeorm';
+import { UserRoles } from '../../types/roles';
+import { defaultInsecureKey } from '../../utils/constants';
+import { entityMap } from '../../utils/entityMap';
+import { UserRepository } from '../user.repository';
+import { AdminRepository } from './admin.repository';
 
 @Injectable()
 export class AdminService {
   public constructor(
+    @InjectConnection() readonly connection: Connection,
     @InjectRepository(UserRepository)
     private readonly userRepo: UserRepository,
     @InjectRepository(AdminRepository)
@@ -44,4 +47,16 @@ export class AdminService {
 
     return newSuperAdmin.id;
   }
+
+  async changeIsActiveBusinessStatus(id: string, userRole: UserRoles.DISTRIBUTOR | UserRoles.MANUFACTURER, status: boolean): Promise<boolean> {
+    const entityRepo = this.connection
+      .getRepository(entityMap[userRole]);
+    const entity = await entityRepo.findOne({id});
+    if (!entity) throw new NotFoundException();
+    const changedEntity = {...entity, status};
+    const savedEntity = await entityRepo.save(changedEntity);
+    if (!savedEntity) throw new InternalServerErrorException('cannot change business status.');
+    return true;
+  }
+
 }

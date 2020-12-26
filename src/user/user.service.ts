@@ -4,21 +4,21 @@ import {
   InternalServerErrorException,
   NotFoundException,
   ServiceUnavailableException,
-  UnauthorizedException,
+  UnauthorizedException
 } from '@nestjs/common';
-import {InjectConnection, InjectRepository} from '@nestjs/typeorm';
+import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
 import cookie from 'cookie';
-import {Response} from 'express';
-import {Connection} from 'typeorm';
-import {JwtService} from '../jwt/jwt.service';
-import {CustomResult} from '../utils/CustomResult';
-import {entityMap} from '../utils/entityMap';
-import {LoginInput} from './input/user.loginInput';
-import {RegisterInput} from './input/user.registerInput';
-import {MeResult} from './user.customResults';
-import {User} from './user.entity';
-import {UserRepository} from './user.repository';
+import { Response } from 'express';
+import { Connection } from 'typeorm';
+import { JwtService } from '../jwt/jwt.service';
+import { CustomResult } from '../utils/CustomResult';
+import { entityMap } from '../utils/entityMap';
+import { LoginInput } from './input/user.loginInput';
+import { RegisterInput } from './input/user.registerInput';
+import { MeResult } from './user.customResults';
+import { User } from './user.entity';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
@@ -27,7 +27,7 @@ export class UserService {
     @InjectConnection() readonly connection: Connection,
     @InjectRepository(UserRepository)
     private readonly userRepo: UserRepository,
-  ) {}
+  ) { }
 
   async users(): Promise<User[]> {
     const users = await this.userRepo.find();
@@ -49,22 +49,22 @@ export class UserService {
       email: email,
     });
     if (alreadyExists) throw new ConflictException('user already exists');
-    const newUser = await this.userRepo.create({email, password});
+    const newUser = await this.userRepo.create({ email, password, role });
     const newRoleEntity = await this.connection
       .getRepository(entityMap[role])
-      .save({user: newUser});
+      .save({ user: newUser });
     if (!newRoleEntity) {
       throw new InternalServerErrorException('cannot create user');
     }
 
-    return new CustomResult({ok: true});
+    return new CustomResult({ ok: true });
   }
 
   async login(
-    {email, password}: LoginInput,
+    { email, password }: LoginInput,
     res: Response,
   ): Promise<CustomResult> {
-    const user = await this.userRepo.findOne({where: {email}});
+    const user = await this.userRepo.findOne({ where: { email } });
     if (!user) {
       throw new UnauthorizedException("email or password doesn't match");
     }
@@ -75,7 +75,7 @@ export class UserService {
     const refreshToken = this.jwtService.createRefreshToken(user);
     this.jwtService.setRefreshToken(res, refreshToken);
     const accessToken = this.jwtService.createAccessToken(user);
-    return new CustomResult({ok: true, value: accessToken});
+    return new CustomResult({ ok: true, value: accessToken });
   }
 
   async me(userId: string): Promise<typeof MeResult> {
@@ -85,7 +85,7 @@ export class UserService {
 
     const roleEntity = await this.connection
       .getRepository(entityMap[user.role])
-      .findOne({where: {userId: user.id}});
+      .findOne({ where: { userId: user.id } });
     if (!roleEntity) throw new NotFoundException();
     roleEntity.user = user;
     return roleEntity;
@@ -93,7 +93,7 @@ export class UserService {
 
   async revokeRefreshToken(userId: string): Promise<boolean> {
     const result = await this.userRepo.increment(
-      {id: userId},
+      { id: userId },
       'tokenVersion',
       1,
     );
@@ -121,7 +121,7 @@ export class UserService {
       throw new UnauthorizedException('Broken jwt.');
     }
 
-    const user = await this.userRepo.findOne({id: jwtPayload.userId});
+    const user = await this.userRepo.findOne({ id: jwtPayload.userId });
 
     if (!user) {
       throw new NotFoundException('user not found');
