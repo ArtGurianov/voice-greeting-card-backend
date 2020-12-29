@@ -1,5 +1,5 @@
 import {createUnionType} from '@nestjs/graphql';
-import {CustomResult} from '../utils/CustomResult';
+import {CustomResult} from 'src/utils/CustomResult';
 import {Admin} from './admin/admin.entity';
 import {Customer} from './customer/customer.entity';
 import {Distributor} from './distributor/distributor.entity';

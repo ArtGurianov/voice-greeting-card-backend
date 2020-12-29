@@ -1,8 +1,9 @@
 import {Args, Mutation, Resolver} from '@nestjs/graphql';
-import {CustomResult} from '../../utils/CustomResult';
-import {Public} from '../../utils/public.decorator';
+import {CustomResult} from 'src/utils/CustomResult';
+import {Public} from 'src/utils/public.decorator';
 import {AudioService} from './audio.service';
 import {AudioFileInfoInput} from './input/audioFileInfo.input';
+
 @Resolver()
 export class AudioResolver {
   constructor(private readonly audioService: AudioService) {}

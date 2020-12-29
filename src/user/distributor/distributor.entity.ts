@@ -7,7 +7,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import {User} from '../user.entity';
+import {User} from 'src/user/user.entity';
 
 @ObjectType()
 @Entity('distributors')

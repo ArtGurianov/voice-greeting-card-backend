@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { sign, verify } from 'jsonwebtoken';
-import { User } from '../user/user.entity';
-import { defaultInsecureKey } from '../utils/constants';
+import { User } from 'src/user/user.entity';
+import { defaultInsecureKey } from 'src/utils/constants';
 
 @Injectable()
 export class JwtService {

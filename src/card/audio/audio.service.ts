@@ -9,12 +9,12 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { S3 } from 'aws-sdk';
 import fetch from 'isomorphic-unfetch';
-import { RedisServiceAdapter } from '../../redis/redisAdapter.service';
-import { REDIS_PREFIXES } from '../../types/redisPrefixes.enum';
-import { MiB } from '../../utils/units';
-import { defaultInsecureKey } from '../../utils/constants';
-import { CustomError, CustomResult } from '../../utils/CustomResult';
-import { CardRepository } from '../card.repository';
+import { RedisServiceAdapter } from 'src/redis/redisAdapter.service';
+import { REDIS_PREFIXES } from 'src/types/redisPrefixes.enum';
+import { MiB } from 'src/utils/units';
+import { defaultInsecureKey } from 'src/utils/constants';
+import { CustomError, CustomResult } from 'src/utils/CustomResult';
+import { CardRepository } from 'src/card/card.repository';
 
 @Injectable()
 export class AudioService {

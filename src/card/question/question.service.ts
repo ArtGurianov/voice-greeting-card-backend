@@ -4,8 +4,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
-import {CustomError, CustomResult} from '../../utils/CustomResult';
-import {CardRepository} from '../card.repository';
+import {CustomError, CustomResult} from 'src/utils/CustomResult';
+import {CardRepository} from 'src/card/card.repository';
 import {Question} from './question.entity';
 import {QuestionRepository} from './question.repository';
 

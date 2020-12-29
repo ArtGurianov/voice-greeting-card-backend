@@ -1,8 +1,8 @@
 import {Args, Context, Mutation, Query, Resolver} from '@nestjs/graphql';
-import {MyContext} from '../types/MyContext';
-import {UserRoles} from '../types/roles';
-import {Public} from '../utils/public.decorator';
-import {Roles} from '../utils/roles.decorator';
+import {MyContext} from 'src/types/MyContext';
+import {UserRoles} from 'src/types/roles';
+import {Public} from 'src/utils/public.decorator';
+import {Roles} from 'src/utils/roles.decorator';
 import {Card} from './card.entity';
 import {CardService} from './card.service';
 

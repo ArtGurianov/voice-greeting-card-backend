@@ -3,8 +3,8 @@ import {Test, TestingModule} from '@nestjs/testing';
 import request from 'supertest';
 import {Connection, EntityManager, QueryRunner} from 'typeorm';
 
-import {AppModule} from '../src/app.module';
-import {TypeOrmConfigService} from '../src/config/typeormConfig.service';
+import {AppModule} from 'src/app.module';
+import {TypeOrmConfigService} from 'src/config/typeormConfig.service';
 
 import {registerCustomerMutation, usersQuery} from './testQueries';
 import {TypeOrmE2EConfigService} from './typeormE2EConfigService';

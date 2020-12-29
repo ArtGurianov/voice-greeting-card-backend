@@ -1,7 +1,7 @@
 import {Field, InputType} from '@nestjs/graphql';
 import {IsEmail, IsString, Matches, MaxLength, MinLength} from 'class-validator';
-import {UserRoles} from '../../types/roles';
-import {User} from '../user.entity';
+import {UserRoles} from 'src/types/roles';
+import {User} from 'src/user/user.entity';
 
 type excludedOptions = typeof UserRoles.ADMIN | typeof UserRoles.SUPER_ADMIN
 type RegisterUserRoles = Exclude<UserRoles, excludedOptions>
