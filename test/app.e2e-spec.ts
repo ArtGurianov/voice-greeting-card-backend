@@ -7,12 +7,12 @@ import { AppModule } from 'src/app.module';
 import { TypeOrmConfigService } from 'src/config/typeormConfig.service';
 
 import { TypeOrmE2EConfigService } from './typeormE2EConfigService';
+import { UserRoles } from 'src/types/roles';
 
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   let httpServer: HttpServer;
-  // let em: EntityManager
   let queryRunner: QueryRunner;
 
   beforeAll(async () => {
@@ -49,30 +49,24 @@ describe('AppController (e2e)', () => {
     await queryRunner.rollbackTransaction();
   });
 
-  it('/GET getHello', async () => {
+  it('/ getGello (GET)', async () => {
     const response = await request(httpServer)
       .get('/')
       .expect(200);
     expect(response.text.length).toBeGreaterThan(0);
   });
 
-  //TODO(@artgurianov): set auth header properly
-  it('(GET) users unauthorized fail', async () => {
+  it('/user/users (GET)', async () => {
     await request(httpServer)
-      .get('/users')
-      //.set('Authorization', 'FakeAuth ADMIN')
-      .expect(200)
-      .expect(({ body }) => {
-        expect(body.hasOwnProperty('errors')).toBeTruthy();
-        expect(body.errors[0].message).toMatch(new RegExp('No auth header.*'));
-      });
+      .get('/user/users')
+      .expect(401);
 
     await request(httpServer)
-      .post('/users')
+      .get('user/users')
       .set('Authorization', 'FakeAuth ADMIN')
       .expect(200)
       .expect(({ body }) => {
-        const users = body.data.users;
+        const users = body;
 
         expect(users.length).not.toBeNaN();
         expect(users.length).not.toBeNull();
@@ -82,17 +76,19 @@ describe('AppController (e2e)', () => {
       });
   });
 
-  it('/user/register (POST) mutation:register', async () => {
+  it('/user/register (POST)', async () => {
     return request(httpServer)
       .post('/user/register')
       .send({
-        email: 'test@test.test',
-        password: 'Qwerty#123!ABC',
-        role: '',
+        registerInput: {
+          email: 'newcustomer@test.test',
+          password: 'Qwerty#123!ABC',
+          role: UserRoles.CUSTOMER,
+        },
       })
-      .expect(200)
+      .expect(201)
       .expect(({ body }) => {
-        expect(body.data.register.ok).toBeTruthy();
+        expect(body.ok).toBeTruthy();
       });
   });
 });
