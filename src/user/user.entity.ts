@@ -1,25 +1,20 @@
-import {Field, ID, ObjectType} from '@nestjs/graphql';
-import {BaseEntity, Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
-import {UserRoles} from 'src/types/roles';
-@ObjectType()
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+import { UserRoles } from 'src/types/roles';
 @Entity('users')
 export class User extends BaseEntity {
-  @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
-  id!: string
+  id!: string;
 
-  @Field()
-  @Column({type: 'text', unique: true, nullable: false})
-  email!: string
+  @Column({ type: 'text', unique: true, nullable: false })
+  email!: string;
 
-  @Column({type: 'text', nullable: false})
-  password!: string
+  @Column({ type: 'text', nullable: false })
+  password!: string;
 
-  @Field()
-  @Column({type: 'int', default: 0})
-  tokenVersion: number
+  @Column({ type: 'int', default: 0 })
+  tokenVersion: number;
 
-  @Field()
-  @Column({type: 'text', default: UserRoles.CUSTOMER})
-  role: UserRoles
+  @Column({ type: 'text' })
+  role: UserRoles;
 }

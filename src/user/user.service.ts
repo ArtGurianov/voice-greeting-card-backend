@@ -61,10 +61,10 @@ export class UserService {
   }
 
   async login(
-    {email, password}: LoginInput,
+    { email, password }: LoginInput,
     res: Response,
-  ): Promise<CustomResult> {
-    const user = await this.userRepo.findOne({where: {email}});
+  ): Promise<string> {
+    const user = await this.userRepo.findOne({ where: { email } });
     if (!user) {
       throw new UnauthorizedException("email or password doesn't match");
     }
@@ -75,10 +75,10 @@ export class UserService {
     const refreshToken = this.jwtService.createRefreshToken(user);
     this.jwtService.setRefreshToken(res, refreshToken);
     const accessToken = this.jwtService.createAccessToken(user);
-    return new CustomResult({ok: true, value: accessToken});
+    return accessToken;
   }
 
-  async me(userId: string): Promise<typeof MeResult> {
+  async me(userId: string): Promise<MeResult> {
     const user = await this.userRepo.findOne(userId);
     // TODO: log the user out
     if (!user) throw new NotFoundException();
@@ -92,6 +92,7 @@ export class UserService {
   }
 
   async revokeRefreshToken(userId: string): Promise<boolean> {
+    //TODO(@artgurianov): admin for anyone, user for himself only.
     const result = await this.userRepo.increment(
       {id: userId},
       'tokenVersion',

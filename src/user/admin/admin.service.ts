@@ -1,14 +1,18 @@
-import {Injectable, InternalServerErrorException} from '@nestjs/common';
-import {ConfigService} from '@nestjs/config';
-import {InjectRepository} from '@nestjs/typeorm';
-import {UserRoles} from 'src/types/roles';
-import {defaultInsecureKey} from 'src/utils/constants';
-import {UserRepository} from 'src/user/user.repository';
-import {AdminRepository} from './admin.repository';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
+
+import { UserRoles } from 'src/types/roles';
+import { defaultInsecureKey } from 'src/utils/constants';
+import { UserRepository } from 'src/user/user.repository';
+import { AdminRepository } from './admin.repository';
+import { Connection } from 'typeorm';
+import { entityMap } from 'src/utils/entityMap';
 
 @Injectable()
 export class AdminService {
   public constructor(
+    @InjectConnection() readonly connection: Connection,
     @InjectRepository(UserRepository)
     private readonly userRepo: UserRepository,
     @InjectRepository(AdminRepository)
@@ -38,10 +42,25 @@ export class AdminService {
     if (!newUser)
       throw new InternalServerErrorException('could not create user record');
 
-    const newSuperAdmin = await this.adminRepo.save({user: newUser});
+    const newSuperAdmin = await this.adminRepo.save({ user: newUser });
     if (!newSuperAdmin)
       throw new InternalServerErrorException('could not create admin record');
 
     return newSuperAdmin.id;
+  }
+
+  async changeIsActiveBusinessStatus(
+    id: string,
+    userRole: UserRoles.DISTRIBUTOR | UserRoles.MANUFACTURER,
+    status: boolean,
+  ): Promise<boolean> {
+    const entityRepo = this.connection.getRepository(entityMap[userRole]);
+    const entity = await entityRepo.findOne({ id });
+    if (!entity) throw new NotFoundException();
+    const changedEntity = { ...entity, status };
+    const savedEntity = await entityRepo.save(changedEntity);
+    if (!savedEntity)
+      throw new InternalServerErrorException('cannot change business status.');
+    return true;
   }
 }

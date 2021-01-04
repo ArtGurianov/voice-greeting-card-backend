@@ -1,13 +1,12 @@
-import {HttpServer, INestApplication} from '@nestjs/common';
-import {Test, TestingModule} from '@nestjs/testing';
+import { HttpServer, INestApplication } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
-import {Connection, EntityManager, QueryRunner} from 'typeorm';
+import { Connection, EntityManager, QueryRunner } from 'typeorm';
 
-import {AppModule} from 'src/app.module';
-import {TypeOrmConfigService} from 'src/config/typeormConfig.service';
+import { AppModule } from 'src/app.module';
+import { TypeOrmConfigService } from 'src/config/typeormConfig.service';
 
-import {registerCustomerMutation, usersQuery} from './testQueries';
-import {TypeOrmE2EConfigService} from './typeormE2EConfigService';
+import { TypeOrmE2EConfigService } from './typeormE2EConfigService';
 
 
 describe('AppController (e2e)', () => {
@@ -17,14 +16,12 @@ describe('AppController (e2e)', () => {
   let queryRunner: QueryRunner;
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule =
-        await Test
-          .createTestingModule({
-            imports: [AppModule],
-          })
-          .overrideProvider(TypeOrmConfigService)
-          .useClass(TypeOrmE2EConfigService)
-          .compile();
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    })
+      .overrideProvider(TypeOrmConfigService)
+      .useClass(TypeOrmE2EConfigService)
+      .compile();
 
     app = moduleFixture.createNestApplication();
     httpServer = app.getHttpServer();
@@ -34,7 +31,9 @@ describe('AppController (e2e)', () => {
     const manager = moduleFixture.get(EntityManager);
     // eslint-disable-next-line
     // @ts-ignore
-    queryRunner = manager.queryRunner = dbConnection.createQueryRunner('master');
+    queryRunner = manager.queryRunner = dbConnection.createQueryRunner(
+      'master',
+    );
   });
 
   afterAll(async done => {
@@ -57,30 +56,22 @@ describe('AppController (e2e)', () => {
     expect(response.text.length).toBeGreaterThan(0);
   });
 
-  it('/graphql (POST) query:users', async () => {
+  //TODO(@artgurianov): set auth header properly
+  it('(GET) users unauthorized fail', async () => {
     await request(httpServer)
-      .post('/graphql')
-      .send({
-        operationName: null,
-        variables: {},
-        query: usersQuery,
-      })
+      .get('/users')
+      //.set('Authorization', 'FakeAuth ADMIN')
       .expect(200)
-      .expect(({body}) => {
+      .expect(({ body }) => {
         expect(body.hasOwnProperty('errors')).toBeTruthy();
         expect(body.errors[0].message).toMatch(new RegExp('No auth header.*'));
       });
 
     await request(httpServer)
-      .post('/graphql')
+      .post('/users')
       .set('Authorization', 'FakeAuth ADMIN')
-      .send({
-        operationName: null,
-        variables: {},
-        query: usersQuery,
-      })
       .expect(200)
-      .expect(({body}) => {
+      .expect(({ body }) => {
         const users = body.data.users;
 
         expect(users.length).not.toBeNaN();
@@ -91,16 +82,16 @@ describe('AppController (e2e)', () => {
       });
   });
 
-  it('/graphql (POST) mutation:register', async () => {
+  it('/user/register (POST) mutation:register', async () => {
     return request(httpServer)
-      .post('/graphql')
+      .post('/user/register')
       .send({
-        operationName: null,
-        variables: {},
-        query: registerCustomerMutation,
+        email: 'test@test.test',
+        password: 'Qwerty#123!ABC',
+        role: '',
       })
       .expect(200)
-      .expect(({body}) => {
+      .expect(({ body }) => {
         expect(body.data.register.ok).toBeTruthy();
       });
   });

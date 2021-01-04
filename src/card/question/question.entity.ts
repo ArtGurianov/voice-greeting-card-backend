@@ -1,4 +1,3 @@
-import {Field, ID, ObjectType} from '@nestjs/graphql';
 import {
   BaseEntity,
   Column,
@@ -7,35 +6,29 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import {Card} from 'src/card/card.entity';
+import { Card } from 'src/card/card.entity';
 
-@ObjectType()
 @Entity('questions')
 export class Question extends BaseEntity {
-  @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
-  id!: string
+  id!: string;
 
-  @Field()
   @Column('text')
-  title: string
+  title: string;
 
-  @Field(() => [String])
-  @Column('text', {array: true})
-  options: string[]
+  @Column('text', { array: true })
+  options: string[];
 
-  @Field()
   @Column('text')
-  answer: string
+  answer: string;
 
   @ManyToOne(
     () => Card,
     c => c.questions,
-    {onDelete: 'CASCADE'},
+    { onDelete: 'CASCADE' },
   )
-  card: Promise<Card>
-  @JoinColumn({name: 'cardId'})
-  @Field(() => ID)
+  card: Promise<Card>;
+  @JoinColumn({ name: 'cardId' })
   @Column('uuid')
-  cardId: string
+  cardId: string;
 }

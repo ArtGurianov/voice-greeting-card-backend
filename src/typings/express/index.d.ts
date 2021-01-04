@@ -1,4 +1,4 @@
-import {JwtPayload} from 'src/types/jwtPayload';
+import { JwtPayload } from 'src/types/jwtPayload';
 
 declare module 'express' {
   /**
@@ -19,6 +19,6 @@ declare module 'express' {
    * ```
    */
   interface Request {
-    jwtPayload?: JwtPayload
+    jwtPayload?: JwtPayload;
   }
 }

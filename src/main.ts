@@ -1,14 +1,13 @@
-import {ConfigService} from '@nestjs/config';
-import {NestFactory} from '@nestjs/core';
-import {NestExpressApplication} from '@nestjs/platform-express';
-import {SwaggerModule, DocumentBuilder} from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
-import {WINSTON_MODULE_NEST_PROVIDER} from 'nest-winston';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
-import {AppModule} from './app.module';
-import {defaultInsecureKey} from 'src/utils/constants';
-
+import { defaultInsecureKey } from 'src/utils/constants';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);

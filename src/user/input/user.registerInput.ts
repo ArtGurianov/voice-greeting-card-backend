@@ -1,27 +1,24 @@
-import {Field, InputType} from '@nestjs/graphql';
-import {IsEmail, IsString, Matches, MaxLength, MinLength} from 'class-validator';
-import {UserRoles} from 'src/types/roles';
-import {User} from 'src/user/user.entity';
+import { IsEmail, IsIn, IsString, Matches, MaxLength, MinLength } from 'class-validator';
+import { UserRoles } from 'src/types/roles';
+import { User } from 'src/user/user.entity';
 
-type excludedOptions = typeof UserRoles.ADMIN | typeof UserRoles.SUPER_ADMIN
-type RegisterUserRoles = Exclude<UserRoles, excludedOptions>
+const userRolesObj = { ...UserRoles };
+const { ADMIN, SUPER_ADMIN, ...registerRolesObj } = userRolesObj;
+const registerRoles = Object.values(registerRolesObj);
 
-@InputType({description: 'New user data'})
 export class RegisterInput implements Partial<User> {
-  @Field()
   @IsEmail()
-  email: string
+  email: string;
 
-  @Field()
   @IsString()
   @MinLength(8)
   @MaxLength(20)
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
     message: 'password too weak',
   })
-  password: string
+  password: string;
 
-  @Field()
   @IsString()
-  role: RegisterUserRoles
+  @IsIn(registerRoles, { message: 'cannot register with spicified Role' })
+  role: UserRoles;
 }
