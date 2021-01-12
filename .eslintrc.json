@@ -9,27 +9,37 @@
     "sourceType": "module"
   },
   "plugins": [
-    "@typescript-eslint/eslint-plugin"
+    "@typescript-eslint/eslint-plugin",
+    "prettier"
   ],
   "root": true,
   "extends": [
+    "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier",
+    "plugin:prettier/recommended",
     "prettier/@typescript-eslint"
   ],
   "rules": {
     "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-explicit-any": "off",
-
     "indent": [
       "error",
       2,
       {
-        "FunctionDeclaration": {"body": 1, "parameters": "off"},
-        "FunctionExpression": {"body": 1, "parameters": "off"},
-        "CallExpression": {"arguments": "off"}
+        "FunctionDeclaration": {
+          "body": 1,
+          "parameters": "off"
+        },
+        "FunctionExpression": {
+          "body": 1,
+          "parameters": "off"
+        },
+        "CallExpression": {
+          "arguments": "off"
+        }
       }
     ],
     "linebreak-style": [
@@ -48,12 +58,24 @@
       "error",
       "always"
     ],
-    "comma-dangle": ["error", {
-      "arrays": "only-multiline",
-      "objects": "always-multiline",
-      "imports": "always-multiline",
-      "exports": "always-multiline",
-      "functions": "always-multiline"
-    }]
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "only-multiline",
+        "objects": "always-multiline",
+        "imports": "always-multiline",
+        "exports": "always-multiline",
+        "functions": "always-multiline"
+      }
+    ],
+
+    "prettier/prettier": [
+      "error",
+      {
+        "trailingComma": "all",
+        "singleQuote": true,
+        "printWidth": 80
+      }
+    ]
   }
 }
