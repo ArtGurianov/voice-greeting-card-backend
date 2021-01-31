@@ -8,8 +8,8 @@ import {
 import {ConfigService} from '@nestjs/config';
 import {Reflector} from '@nestjs/core';
 import {GqlContextType, GqlExecutionContext} from '@nestjs/graphql';
-import {JwtService} from '../jwt/jwt.service';
-import {UserRoles} from '../types/roles';
+import {JwtService} from 'src/jwt/jwt.service';
+import {UserRoles} from 'src/types/roles';
 
 const BEARER_PREFIX = 'Bearer ';
 const FAKE_AUTH_PREFIX = 'FakeAuth ';

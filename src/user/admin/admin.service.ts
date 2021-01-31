@@ -1,9 +1,9 @@
 import {Injectable, InternalServerErrorException} from '@nestjs/common';
 import {ConfigService} from '@nestjs/config';
 import {InjectRepository} from '@nestjs/typeorm';
-import {UserRoles} from '../../types/roles';
-import {defaultInsecureKey} from '../../utils/constants';
-import {UserRepository} from '../user.repository';
+import {UserRoles} from 'src/types/roles';
+import {defaultInsecureKey} from 'src/utils/constants';
+import {UserRepository} from 'src/user/user.repository';
 import {AdminRepository} from './admin.repository';
 
 @Injectable()

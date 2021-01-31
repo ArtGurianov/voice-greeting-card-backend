@@ -7,7 +7,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import {Card} from '../card.entity';
+import {Card} from 'src/card/card.entity';
 
 @ObjectType()
 @Entity('questions')

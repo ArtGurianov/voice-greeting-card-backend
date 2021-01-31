@@ -1,17 +1,17 @@
 import {UseFilters} from '@nestjs/common';
 import {Args, Context, Mutation, Query, Resolver} from '@nestjs/graphql';
-import {MyContext} from '../types/MyContext';
-import {CustomResult} from '../utils/CustomResult';
-import {Public} from '../utils/public.decorator';
-import validationFilter from '../utils/validation.filter';
-import {validationPipe} from '../utils/validationPipe';
+import {MyContext} from 'src/types/MyContext';
+import {CustomResult} from 'src/utils/CustomResult';
+import {Public} from 'src/utils/public.decorator';
+import validationFilter from 'src/utils/validation.filter';
+import {validationPipe} from 'src/utils/validationPipe';
 import {LoginInput} from './input/user.loginInput';
 import {RegisterInput} from './input/user.registerInput';
 import {MeResult} from './user.customResults';
 import {User} from './user.entity';
 import {UserService} from './user.service';
-import {Roles} from '../utils/roles.decorator';
-import {UserRoles} from '../types/roles';
+import {Roles} from 'src/utils/roles.decorator';
+import {UserRoles} from 'src/types/roles';
 
 @Resolver()
 export class UserResolver {

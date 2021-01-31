@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcryptjs';
 import {EntitySubscriberInterface, EventSubscriber, InsertEvent} from 'typeorm';
-import {User} from '../user/user.entity';
+import {User} from 'src/user/user.entity';
 
 @EventSubscriber()
 export class PostSubscriber implements EntitySubscriberInterface<User> {

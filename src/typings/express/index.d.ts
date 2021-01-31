@@ -1,4 +1,4 @@
-import {JwtPayload} from '../../types/jwtPayload';
+import {JwtPayload} from 'src/types/jwtPayload';
 
 declare module 'express' {
   /**

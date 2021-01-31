@@ -22,6 +22,24 @@ and then run passing the env file (look at `.env.example`):
 $ yarn run start:prod -- dotenv_config_path=../.env # note the space between -- and the argument
 ```
 
+## Build
+
+Note that import paths in Voicy are relative to `src/`, e.g.:
+
+```js
+// src/card/audio/input/audioFileInfo.input.ts
+
+import { MiB } from 'src/utils/units'; // no need to write '../../../utils/units'
+```
+
+Paths are set in `tsconfig.json` and resolved via `tsconfig-paths` module. Hence, to be able
+to run `ts-node` or `node`, this module should be loaded:
+
+```bash
+$ node -r tsconfig-paths/register path_to_file.js
+```
+
+But you probably should not do that manually, since all commands are already defined in `package.json`
 
 ## API Documentation
 

@@ -21,6 +21,9 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "baseUrl": ".",
+    "paths": {
+        "src/*": ["src/*"]
+    },
     "typeRoots": ["src/typings", "node_modules/@types"]
   },
   "exclude": ["node_modules", "dist"],

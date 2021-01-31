@@ -1,7 +1,7 @@
 import {Module} from '@nestjs/common';
 import {ConfigModule, ConfigService} from '@nestjs/config';
 import {RedisModule} from 'nestjs-redis';
-import {defaultInsecureKey} from '../utils/constants';
+import {defaultInsecureKey} from 'src/utils/constants';
 import {RedisServiceAdapter} from './redisAdapter.service';
 
 @Module({
