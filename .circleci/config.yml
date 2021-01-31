@@ -2,7 +2,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: node:12.13-alpine
+      - image: node:14-alpine
 
     working_directory: ~/usr/src/app
 
