@@ -11,17 +11,17 @@ export class JwtService {
 
   createAccessToken(user: User) {
     return sign(
-      {userId: user.id, role: user.role},
+      { userId: user.id, userRole: user.role },
       this.configService.get<string>('jwtAccessSecret', defaultInsecureKey),
-      {expiresIn: '15m'},
+      { expiresIn: '15m' },
     );
   }
 
   createRefreshToken(user: User) {
     return sign(
-      {userId: user.id, role: user.role, tokenVersion: user.tokenVersion},
+      { userId: user.id, userRole: user.role, tokenVersion: user.tokenVersion },
       this.configService.get<string>('jwtRefreshSecret', defaultInsecureKey),
-      {expiresIn: '7d'},
+      { expiresIn: '7d' },
     );
   }
 

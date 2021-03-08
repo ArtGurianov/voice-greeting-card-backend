@@ -1,4 +1,3 @@
-import {Field, ID, ObjectType} from '@nestjs/graphql';
 import {
   BaseEntity,
   Column,
@@ -6,43 +5,34 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import {Question} from './question/question.entity';
+import { Question } from './question/question.entity';
 
-@ObjectType()
 @Entity('cards')
 export class Card extends BaseEntity {
-  @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
-  id!: string
+  id!: string;
 
-  @Field()
-  @Column({type: 'boolean', default: false})
-  isPrinted!: boolean
+  @Column({ type: 'boolean', default: false })
+  isPrinted!: boolean;
 
-  @Field()
-  @Column({type: 'boolean', default: false})
-  isActivatedAudio!: boolean
+  @Column({ type: 'boolean', default: false })
+  isActivatedAudio!: boolean;
 
-  @Field()
-  @Column({type: 'boolean', default: false})
-  isActivatedQuestions!: boolean
+  @Column({ type: 'boolean', default: false })
+  isActivatedQuestions!: boolean;
 
-  @Field()
-  @Column({type: 'boolean', default: false})
-  isRevoked!: boolean
+  @Column({ type: 'boolean', default: false })
+  isRevoked!: boolean;
 
-  @Field(() => ID)
-  @Column({type: 'uuid', nullable: true})
-  distributorId: string
+  @Column({ type: 'uuid', nullable: true })
+  distributorId: string;
 
-  @Field(() => ID)
-  @Column({type: 'uuid'})
-  issuedBy!: string
+  @Column({ type: 'uuid' })
+  issuedBy!: string;
 
-  @Field(() => [Question])
   @OneToMany(
     () => Question,
     q => q.card,
   )
-  questions: Promise<Question[]>
+  questions: Promise<Question[]>;
 }

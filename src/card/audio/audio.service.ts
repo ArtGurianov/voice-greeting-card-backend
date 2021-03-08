@@ -38,7 +38,7 @@ export class AudioService {
     });
   }
 
-  private readonly audioStorage: S3
+  private readonly audioStorage: S3;
 
   async transcribeAudioFile(audiofile: any): Promise<string> {
     const result = await fetch('https://api.wit.ai/speech', {
@@ -72,13 +72,13 @@ export class AudioService {
     const alreadySigned = await this.redisService.get(
       `${REDIS_PREFIXES.UPLOAD_S3}${cardId}`,
     );
-    if (alreadySigned) return new CustomResult({ok: true, value: alreadySigned});
+    if (alreadySigned)
+      return new CustomResult({ ok: true, value: alreadySigned });
 
-    const card = await this.cardRepo.findOne({id: cardId});
+    const card = await this.cardRepo.findOne({ id: cardId });
     if (!card) {
       throw new NotFoundException('card not found');
     }
-
 
     const url = await this.audioStorage.getSignedUrl('putObject', {
       ACL: 'public-read',
@@ -102,11 +102,11 @@ export class AudioService {
       60 * 10,
     );
 
-    return new CustomResult({ok: true, value: url});
+    return new CustomResult({ ok: true, value: url });
   }
 
   async activateCardAudio(cardId: string): Promise<CustomResult> {
-    const card = await this.cardRepo.findOne({id: cardId});
+    const card = await this.cardRepo.findOne({ id: cardId });
     if (!card) throw new NotFoundException('card not found');
     if (card.isActivatedAudio)
       return new CustomResult({
@@ -133,6 +133,6 @@ export class AudioService {
       throw new InternalServerErrorException("failed to save card's audio");
     }
 
-    return new CustomResult({ok: true});
+    return new CustomResult({ ok: true });
   }
 }

@@ -1,6 +1,9 @@
-import {Injectable} from '@nestjs/common';
-import {WinstonModuleOptions, WinstonModuleOptionsFactory} from 'nest-winston';
-import {format, transports} from 'winston';
+import { Injectable } from '@nestjs/common';
+import {
+  WinstonModuleOptions,
+  WinstonModuleOptionsFactory,
+} from 'nest-winston';
+import { format, transports } from 'winston';
 
 @Injectable()
 export class WinstonConfigService implements WinstonModuleOptionsFactory {
@@ -23,7 +26,7 @@ export class WinstonConfigService implements WinstonModuleOptionsFactory {
           format: format.combine(
             format.splat(),
             format.simple(),
-            format.colorize({message: true}),
+            format.colorize({ message: true }),
             format.printf(this.consoleLoggerFormat),
           ),
         }),

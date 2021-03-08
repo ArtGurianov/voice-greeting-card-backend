@@ -1,18 +1,12 @@
-import {Field, InputType} from '@nestjs/graphql';
-import {IsString} from 'class-validator';
-import {Question} from 'src/card/question/question.entity';
-
-@InputType({description: 'Set card data'})
+import { IsString } from 'class-validator';
+import { Question } from 'src/card/question/question.entity';
 export class QuestionInput implements Partial<Question> {
-  @Field()
   @IsString()
-  title: string
+  title: string;
 
-  @Field(() => [String])
-  @IsString({each: true})
-  options: string[]
+  @IsString({ each: true })
+  options: string[];
 
-  @Field()
   @IsString()
-  answer: string
+  answer: string;
 }

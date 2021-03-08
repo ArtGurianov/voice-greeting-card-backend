@@ -1,6 +1,9 @@
+import { AuthTypes } from './authTypes';
+import { UserRoles } from './roles';
 export interface JwtPayload {
-  userId: string
-  userRole: string
-  iat: number
-  exp: number
+  authType: AuthTypes;
+  userId: string;
+  userRole: UserRoles;
+  iat: number;
+  exp: number;
 }

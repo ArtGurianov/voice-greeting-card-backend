@@ -4,9 +4,9 @@ import {
   LoggerService,
   OnApplicationShutdown,
 } from '@nestjs/common';
-import {InjectConnection} from '@nestjs/typeorm';
-import {WINSTON_MODULE_NEST_PROVIDER} from 'nest-winston';
-import {Connection} from 'typeorm';
+import { InjectConnection } from '@nestjs/typeorm';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { Connection } from 'typeorm';
 
 @Injectable()
 export class AppService implements OnApplicationShutdown {
@@ -22,6 +22,6 @@ export class AppService implements OnApplicationShutdown {
   }
 
   getHello(): string {
-    return `Welcome to <i><b>voicy.ru</b></i> graphql api. You can play with it by accessing the <a href='https://api.voicy.ru/graphql'>playground</a>! Have fun :)`;
+    return `Welcome to <i><b>voicy.ru</b></i> <s>graphql</s> REST api. You can play with it by sending get/post requests! Have fun :)`;
   }
 }

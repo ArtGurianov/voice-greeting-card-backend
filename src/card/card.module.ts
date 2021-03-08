@@ -1,10 +1,10 @@
-import {Module} from '@nestjs/common';
-import {TypeOrmModule} from '@nestjs/typeorm';
-import {AudioModule} from './audio/audio.module';
-import {CardRepository} from './card.repository';
-import {CardResolver} from './card.resolver';
-import {CardService} from './card.service';
-import {QuestionModule} from './question/question.module';
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AudioModule } from './audio/audio.module';
+import { CardController } from './card.controller';
+import { CardRepository } from './card.repository';
+import { CardService } from './card.service';
+import { QuestionModule } from './question/question.module';
 
 @Module({
   imports: [
@@ -12,6 +12,7 @@ import {QuestionModule} from './question/question.module';
     AudioModule,
     QuestionModule,
   ],
-  providers: [CardResolver, CardService],
+  providers: [CardService],
+  controllers: [CardController],
 })
 export class CardModule {}
