@@ -65,7 +65,7 @@ export class AudioService {
       throw new PayloadTooLargeException('file is too big');
     }
 
-    if (fileName.split('.').slice(-1)[0] !== 'wav') {
+    if (!fileName.endsWith('.wav')) {
       throw new NotAcceptableException('unsupported file format');
     }
 
